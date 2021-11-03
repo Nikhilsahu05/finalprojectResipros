@@ -59,6 +59,8 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
 
   List selectedWorkType = [];
 
+  bool isloadingDialog = false;
+
   void _openFilterDialog() async {
     await FilterListDialog.display<dynamic>(context,
         listData: typesOfWork,
@@ -381,6 +383,52 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
               },
               controlAffinity:
                   ListTileControlAffinity.leading, //  <-- leading Checkbox
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                    onTap: () {},
+                    child: Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5.0,
+                            horizontal: 5.0,
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                              vertical: 10.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.deepOrangeAccent,
+                              borderRadius: BorderRadius.circular(100.0),
+                            ),
+                            child: Text(
+                              '${selectedWorkType[0]}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.orange.shade600,
+                            radius: 8.0,
+                            child: Icon(
+                              Icons.clear,
+                              size: 10.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ],
             ),
           ],
         ),
