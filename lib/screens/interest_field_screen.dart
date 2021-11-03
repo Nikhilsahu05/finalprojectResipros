@@ -1,5 +1,7 @@
+import 'package:filter_list/filter_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:get/get.dart';
 
 class InterestFieldScreen extends StatefulWidget {
   const InterestFieldScreen({Key? key}) : super(key: key);
@@ -39,7 +41,55 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
 
   var checkboxElectricianFitting = false;
 
-  List typesOfWork = ['a', 'b', 'c'];
+  List typesOfWork = [
+    'Carpentry',
+    'Plasterwork',
+    'Steel construction work',
+    "Sheet metal work",
+    "Glass work",
+    "Coating work",
+    "Waterproofing work",
+    "Thermal insulation work",
+    "Telecommunications work",
+    "Landscape gardening",
+    "Firefighting facilities work",
+    "Waste facilities work",
+    "Water facilities work",
+  ];
+
+  List selectedWorkType = [];
+
+  void _openFilterDialog() async {
+    await FilterListDialog.display<dynamic>(context,
+        listData: typesOfWork,
+        selectedListData: selectedWorkType,
+        height: 480,
+        headlineText: "Select Type Of Work",
+        searchFieldHintText: "Search Here", choiceChipLabel: (item) {
+      return item;
+    }, validateSelectedItem: (list, val) {
+      return list!.contains(val);
+    }, onItemSearch: (list, text) {
+      if (list!.any(
+          (element) => element.toLowerCase().contains(text.toLowerCase()))) {
+        return list!
+            .where(
+                (element) => element.toLowerCase().contains(text.toLowerCase()))
+            .toList();
+      } else {
+        return [];
+      }
+    }, onApplyButtonClick: (list) {
+      if (list != null) {
+        setState(() {
+          selectedWorkType = List.from(list);
+        });
+
+        print(selectedWorkType);
+        Get.back();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +375,9 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                 setState(() {
                   checkboxOther = newValue!;
                 });
+                if (checkboxOther == true) {
+                  _openFilterDialog();
+                }
               },
               controlAffinity:
                   ListTileControlAffinity.leading, //  <-- leading Checkbox
