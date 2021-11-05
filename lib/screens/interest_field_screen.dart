@@ -5,7 +5,8 @@ import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:resipros/screens/database_services.dart';
-import 'package:resipros/screens/home_screen.dart';
+
+import 'loading_screen.dart';
 
 class InterestFieldScreen extends StatefulWidget {
   const InterestFieldScreen({Key? key}) : super(key: key);
@@ -537,7 +538,7 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                             setState(() {
                               isLoading = false;
                             });
-                            Get.offAll(HomeScreen());
+                            Get.offAll(LoadingScreen());
                           } else {
                             Get.snackbar("Try Again",
                                 'Any One Field Should Be Selected');

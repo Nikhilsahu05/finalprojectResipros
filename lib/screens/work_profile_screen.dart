@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:resipros/screens/database_services.dart';
 
 import 'interest_field_screen.dart';
 
@@ -70,6 +71,7 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
   TextEditingController _InchPriceRangeSecond = TextEditingController();
 
   TextEditingController _InchPriceRangeFirst = TextEditingController();
+  DataBaseServices _dataBaseServices = DataBaseServices();
 
   @override
   Widget build(BuildContext context) {
