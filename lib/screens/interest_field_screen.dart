@@ -2,7 +2,10 @@ import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:resipros/screens/database_services.dart';
+import 'package:resipros/screens/home_screen.dart';
 
 class InterestFieldScreen extends StatefulWidget {
   const InterestFieldScreen({Key? key}) : super(key: key);
@@ -71,12 +74,19 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
   Widget build(BuildContext context) {
     String currentText = "";
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height * 1.5,
-          child: isLoading == true
-              ? CircularProgressIndicator()
-              : Column(
+      body: isLoading == true
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                  child: SpinKitFadingCube(
+                color: Colors.blueAccent,
+                size: 100.0,
+              )),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 1.5,
+                child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -498,29 +508,49 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                           elevation: 5,
                         ),
                         onPressed: () async {
-                          isLoading = true;
-                          DataBaseServices _db = await DataBaseServices()
-                              .storeWorkInterestInformation(
-                                  checkboxResidential,
-                                  checkboxCommercial,
-                                  checkboxResidential,
-                                  checkboxConstructionRepairing,
-                                  checkboxInterior,
-                                  checkboxPainter,
-                                  checkboxPlumberFitting,
-                                  checkboxPlumberRepairing,
-                                  checkboxElectricianFitting,
-                                  checkboxElectricianRepairing,
-                                  selectedWorkType);
-                          print('Pressed');
-                          isLoading = false;
+                          DataBaseServices db = DataBaseServices();
+                          if (checkboxConstruction ||
+                              checkboxInterior ||
+                              checkboxPainter ||
+                              checkboxPlumber ||
+                              checkboxElectrician ||
+                              checkboxOther == true) {
+                            print('Pressed');
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await db.storeWorkInterestInformation(
+                                checkboxConstruction,
+                                checkboxBuilding,
+                                checkboxCommercial,
+                                checkboxResidential,
+                                checkboxConstructionRepairing,
+                                checkboxInterior,
+                                checkboxPainter,
+                                checkboxPlumber,
+                                checkboxPlumberFitting,
+                                checkboxPlumberRepairing,
+                                checkboxElectrician,
+                                checkboxElectricianFitting,
+                                checkboxElectricianRepairing,
+                                selectedWorkType);
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Get.offAll(HomeScreen());
+                          } else {
+                            Get.snackbar("Try Again",
+                                'Any One Field Should Be Selected');
+                          }
+
+                          print('${isLoading} value of bool');
                         },
                       ),
                     )
                   ],
                 ),
-        ),
-      ),
+              ),
+            ),
       appBar: AppBar(
         centerTitle: true,
         title: Text("Work Profile"),

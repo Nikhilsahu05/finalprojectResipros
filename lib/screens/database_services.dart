@@ -62,50 +62,39 @@ class DataBaseServices {
   }
 
   Future storeWorkInterestInformation(
-    bool residential,
-    bool commercial,
-    bool repairing,
-    bool repairingConstruction,
+    bool constructionandRepairing,
+    bool building,
+    bool commercialBuilding,
+    bool residentialBuilding,
+    bool constructionRepairing,
     bool interiorDesigner,
     bool painter,
-    bool fullFittingPlumber,
-    bool repairingPlumber,
-    bool fullFittingElectrician,
-    bool repairingElectrician,
-    List otherFieldsList,
+    bool plumber,
+    bool plumberFitting,
+    bool plumberRepairing,
+    bool elctrician,
+    bool electricianFitting,
+    bool electricianRepairing,
+    List OtherFields,
   ) async {
     await _firebaseFirestore
         .collection(_auth.currentUser!.uid)
         .doc(dbDocWorkInterestInformation)
         .set({
-      "ConstructionAndRepairing": [
-        {
-          "Building": [
-            {
-              "Residential": residential,
-              "Commercial": commercial,
-            }
-          ]
-        },
-        {
-          "Repairing": repairingConstruction,
-        }
-      ],
-      "InteriorDesigner ": interiorDesigner,
-      "Painter ": painter,
-      "Plumber ": [
-        {
-          'FullFitting': fullFittingPlumber,
-          'Repairing': repairingPlumber,
-        }
-      ],
-      "Electrician ": [
-        {
-          'FullFitting': fullFittingElectrician,
-          'Repairing': repairingElectrician,
-        }
-      ],
-      'OtherFields': otherFieldsList,
+      "constructionAndRepairing": constructionandRepairing,
+      "building": building,
+      "commercialBuilding": commercialBuilding,
+      "residentialBuilding": residentialBuilding,
+      "constructionRepairing": constructionRepairing,
+      "interiorDesigning": interiorDesigner,
+      "painter": painter,
+      'plumber': plumber,
+      'plumberFitting': plumberFitting,
+      'plumberRepairing': plumberRepairing,
+      "electrician": elctrician,
+      "electricianFitting": electricianFitting,
+      "electricianRepairing": electricianRepairing,
+      "otherField": OtherFields,
     }).whenComplete(() {
       print("Database services + storePhoneNumberInformation ====> COMPLETED");
     }).catchError((onError) {
