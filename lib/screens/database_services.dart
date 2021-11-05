@@ -60,4 +60,56 @@ class DataBaseServices {
       print("Database services + storePhoneNumberInformation ====> $onError");
     });
   }
+
+  Future storeWorkInterestInformation(
+    bool residential,
+    bool commercial,
+    bool repairing,
+    bool repairingConstruction,
+    bool interiorDesigner,
+    bool painter,
+    bool fullFittingPlumber,
+    bool repairingPlumber,
+    bool fullFittingElectrician,
+    bool repairingElectrician,
+    List otherFieldsList,
+  ) async {
+    await _firebaseFirestore
+        .collection(_auth.currentUser!.uid)
+        .doc(dbDocWorkInterestInformation)
+        .set({
+      "ConstructionAndRepairing": [
+        {
+          "Building": [
+            {
+              "Residential": residential,
+              "Commercial": commercial,
+            }
+          ]
+        },
+        {
+          "Repairing": repairingConstruction,
+        }
+      ],
+      "InteriorDesigner ": interiorDesigner,
+      "Painter ": painter,
+      "Plumber ": [
+        {
+          'FullFitting': fullFittingPlumber,
+          'Repairing': repairingPlumber,
+        }
+      ],
+      "Electrician ": [
+        {
+          'FullFitting': fullFittingElectrician,
+          'Repairing': repairingElectrician,
+        }
+      ],
+      'OtherFields': otherFieldsList,
+    }).whenComplete(() {
+      print("Database services + storePhoneNumberInformation ====> COMPLETED");
+    }).catchError((onError) {
+      print("Database services + storePhoneNumberInformation ====> $onError");
+    });
+  }
 }
