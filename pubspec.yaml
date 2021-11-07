@@ -49,6 +49,7 @@ dependencies:
   firebase_database: ^8.0.1
   cloud_firestore: ^2.5.4
   filter_list: ^1.0.0
+  persistent_bottom_nav_bar: any
 
 
 flutter_native_splash:

@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:resipros/screens/loading_screen.dart';
+import 'package:resipros/screens/home_screen.dart';
+import 'package:resipros/screens/onboarding/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,7 +66,7 @@ class _MyAppStatefulState extends State<MyAppStateful> {
     return Material(
       child: MaterialApp(
         home: Scaffold(
-          body: _signedInUser == false ? LoadingScreen() : LoadingScreen(),
+          body: _signedInUser == false ? OnboardingScreen() : HomeScreen(),
         ),
       ),
     );

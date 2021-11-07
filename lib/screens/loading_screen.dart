@@ -29,23 +29,25 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return timer == 0
         ? HomeScreen()
-        : Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SpinKitDoubleBounce(
-                  color: Colors.blue,
-                  size: 150,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "Please Wait! While Analysing Your Data...",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
-                ),
-              ],
+        : Material(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SpinKitDoubleBounce(
+                    color: Colors.blue,
+                    size: 150,
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Please Wait! While Analysing Your Data...",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
           );
   }
