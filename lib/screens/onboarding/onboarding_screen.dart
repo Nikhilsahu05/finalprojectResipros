@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:resipros/model/onboard_model.dart';
 import 'package:resipros/screens/credentials/registration/registration_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import 'package:flutter_fadein/flutter_fadein.dart';
-
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -15,8 +13,8 @@ class OnboardingScreen extends StatefulWidget {
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> with TickerProviderStateMixin{
-
+class _OnboardingScreenState extends State<OnboardingScreen>
+    with TickerProviderStateMixin {
   int currentIndex = 0;
 
   List<OnBoardModel> screens = [
@@ -24,30 +22,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
       imgUrl: "assets/onboarding_images/interior_designer.jpg",
       title: "Hey!! Pro Interior Designer",
       description:
-      "We heard you have very creative interior ideas? We can help you spread your creativity amongst people and help you get work.",
+          "We heard you have very creative interior ideas? We can help you spread your creativity amongst people and help you get work.",
     ),
     OnBoardModel(
       imgUrl: "assets/onboarding_images/electrician.jpg",
       title: "Hey!! Pro Electrician",
       description:
-      "Problem finding work! You can now pack your stuff and get ready for work, our platform is here to keep you busy, feeling excited!",
+          "Problem finding work! You can now pack your stuff and get ready for work, our platform is here to keep you busy, feeling excited!",
     ),
     OnBoardModel(
       imgUrl: "assets/onboarding_images/construction.jpg",
       title: "Hey!! Pro Constructor",
       description:
-      "We know you are awesome, you are making people's dreams come true by helping them build their dream houses, we can help you find more such projects and continue to get the blessings.",
+          "We know you are awesome, you are making people's dreams come true by helping them build their dream houses, we can help you find more such projects and continue to get the blessings.",
     ),
     OnBoardModel(
         imgUrl: "assets/onboarding_images/plumber.jpg",
         title: "Hey!! Pro Plumber",
         description:
-        "Looking for work! Let us help you. You can get work just by following some simple, easy steps, near your location with good wages.")
+            "Looking for work! Let us help you. You can get work just by following some simple, easy steps, near your location with good wages.")
   ];
 
   PageController myPageViewController = new PageController(initialPage: 0);
   final ValueNotifier<double> currentPage = ValueNotifier<double>(0.0);
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +149,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                   decoration: const BoxDecoration(
                       color: Color(0xFFF4F4F4),
                       borderRadius:
-                      BorderRadius.only(topLeft: Radius.circular(120.0))),
+                          BorderRadius.only(topLeft: Radius.circular(120.0))),
                   width: MediaQuery.of(context).size.width,
                 ),
               ),
@@ -170,7 +167,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                     dotHeight: 11.5,
                     spacing: 5,
                     dotColor: Color(0xFFD6D6D6),
-                    activeDotColor: Color(0xFF454136),
+                    activeDotColor: Color(0xFFB983FF),
                   ),
                 ),
               ),
@@ -183,23 +180,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                 child: Align(
                   child: currentPage != 3
                       ? Material(
-                    color: Colors.transparent,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.hardEdge,
-                    child: InkWell(
-                      onTap: () {
-                        myPageViewController.nextPage(
-                            duration: const Duration(milliseconds: 565),
-                            curve: Curves.ease);
-                      },
-                      child: Ink(
-                        child: const Icon(
-                          Icons.chevron_right,
-                          size: 50,
-                        ),
-                      ),
-                    ),
-                  )
+                          color: Colors.transparent,
+                          shape: const CircleBorder(),
+                          clipBehavior: Clip.hardEdge,
+                          child: InkWell(
+                            onTap: () {
+                              myPageViewController.nextPage(
+                                  duration: const Duration(milliseconds: 565),
+                                  curve: Curves.ease);
+                            },
+                            child: Ink(
+                              child: const Icon(
+                                Icons.chevron_right,
+                                size: 50,
+                                color: Color(0xFFB983FF),
+                              ),
+                            ),
+                          ),
+                        )
                       : const SizedBox(),
                 ),
               ),
@@ -215,20 +213,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> with TickerProvider
                     curve: Curves.easeIn,
                     child: ElevatedButton(
                       onPressed: () {
-                       Get.to(const RegistrationScreen());
+                        Get.to(const RegistrationScreen());
                       },
                       child: const Text("Get Started",
-                          style: TextStyle(color: Color(0xFFF4F4F4))),
+                          style: TextStyle(color: Colors.black)),
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           padding: const EdgeInsets.all(12.0),
-                          primary: const Color(0xFF454136),
+                          primary: const Color(0xFFB983FF),
                           textStyle: const TextStyle(
-
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),

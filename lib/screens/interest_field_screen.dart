@@ -6,7 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:resipros/screens/database_services.dart';
 
-import 'loading_screen.dart';
+import 'home_screen.dart';
 
 class InterestFieldScreen extends StatefulWidget {
   const InterestFieldScreen({Key? key}) : super(key: key);

@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
-import 'package:get/get.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:resipros/constants/constants.dart';
 import 'package:resipros/screens/settings_profile_screen.dart';
+
+import 'manage_address_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,11 +17,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+FirebaseFirestore firebase = FirebaseFirestore.instance;
+FirebaseAuth auth = FirebaseAuth.instance;
 String profileImageUrl = "https://via.placeholder.com/150";
-String gridImageUrl = "https://via.placeholder.com/150";
+String gridImageUrl =
+    "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg";
 String fullNameDashboard = "Full Name";
 String phoneNumberDashboard = "xxx xxx xxxx";
-String refferalCodeDashboard = "         xx xxxx";
+String refferalCodeDashboard = "xx xxxx";
 
 class _HomeScreenState extends State<HomeScreen> {
   PersistentTabController _controller =
@@ -303,7 +309,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text("Member Ship Plan"),
+              child: Text("Membership Plan"),
             ),
             SizedBox(
               height: 25,
@@ -378,7 +384,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 backgroundImage: NetworkImage(profileImageUrl),
               ),
               onTap: () {
-                Get.to(SettingsProfileScreen);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SettingsProfileScreen()),
+                );
                 print("Settings tab profile Option Tapped");
               },
               title: Text("${fullNameDashboard}"),
@@ -397,9 +407,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Icons.notifications_active,
                   color: Colors.blue,
                 ),
-                onTap: () {
-                  print("Settings tab Notification Option Tapped");
-                },
                 title: Text("Notifications"),
                 subtitle: Text("Turn on/off Notification"),
                 trailing: Switch(
@@ -421,10 +428,85 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: Colors.blue,
               ),
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ManageAddressScreen()),
+                );
+
                 print("Settings tab Address Option Tapped");
               },
               title: Text("My Address"),
               subtitle: Text("Manage Work Addresses"),
+              trailing: Icon(
+                Icons.chevron_right,
+                size: 35,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: ListTile(
+              horizontalTitleGap: 20,
+              leading: Icon(
+                Icons.contact_support,
+                color: Colors.blue,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ManageAddressScreen()),
+                );
+
+                print("Contact us Option Tapped");
+              },
+              title: Text("Contact Us"),
+              subtitle: Text("Feel free to contact us"),
+              trailing: Icon(
+                Icons.chevron_right,
+                size: 35,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: ListTile(
+              horizontalTitleGap: 20,
+              leading: Icon(
+                Icons.contact_phone,
+                color: Colors.blue,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ManageAddressScreen()),
+                );
+
+                print("About us Address Option Tapped");
+              },
+              title: Text("About us"),
+              subtitle: Text("Know More About Resipros"),
+              trailing: Icon(
+                Icons.chevron_right,
+                size: 35,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: ListTile(
+              horizontalTitleGap: 20,
+              leading: Icon(
+                Icons.report,
+                color: Colors.blue,
+              ),
+              onTap: () {
+                print("Settings Report  Option Tapped");
+              },
+              title: Text("Report"),
+              subtitle: Text("Report any Anonymous Activity"),
               trailing: Icon(
                 Icons.chevron_right,
                 size: 35,
@@ -453,5 +535,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+}
+
+class LoadingScreen extends StatefulWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+//Call All The Data Here
+  @override
+  _LoadingScreenState createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  Future callDatabasePhoneNumber() async {
+    await firebase
+        .collection("${auth.currentUser!.uid}")
+        .doc(dbDocPhoneNumberInformation)
+        .get()
+        .then((value) {
+      print(value.data());
+      setState(() {
+        phoneNumberDashboard = value.data()!["phoneNumber"];
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
+  Future callDatabaseProfileInformation() async {
+    await firebase
+        .collection("${auth.currentUser!.uid}")
+        .doc(dbDocProfileInformation)
+        .get()
+        .then((value) {
+      print(value.data());
+      setState(() {
+        fullNameDashboard = value.data()!["fullName"];
+        profileImageUrl = value.data()!["profileImageURL"];
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
+  Future callDatabaseRefferalInformation() async {
+    await firebase
+        .collection("${auth.currentUser!.uid}")
+        .doc(dbDocRefferalInformation)
+        .get()
+        .then((value) {
+      print(value.data());
+      setState(() {
+        refferalCodeDashboard = value.data()!["refferalCode"];
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
+  int timer = 6;
+  Future timerCountDown() async {
+    await Future.delayed(Duration(seconds: 5));
+    print(timer);
+    setState(() {
+      timer = 0;
+    });
+  }
+
+  @override
+  void initState() {
+    callDatabasePhoneNumber();
+    callDatabaseProfileInformation();
+    callDatabaseRefferalInformation();
+    timerCountDown();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return timer == 0
+        ? HomeScreen()
+        : Material(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SpinKitDoubleBounce(
+                    color: Colors.blue,
+                    size: 150,
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "Please Wait! While Analysing Your Data...",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+          );
   }
 }

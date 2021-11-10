@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import 'package:resipros/screens/database_services.dart';
+import 'package:resipros/screens/profile_screen.dart';
 
 import '../../home_screen.dart';
-import '../../refferal_code_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   var verificationId;
@@ -38,20 +38,20 @@ class _OtpScreenState extends State<OtpScreen> {
                 .substring(0, 6)
                 .toUpperCase();
             Get.snackbar("New User", "First Time Registered",
-                overlayColor: Colors.grey, colorText: Colors.white);
+                overlayColor: Colors.grey, colorText: Colors.black);
           });
 
           _databaseServices.storeRefferalCode(refferalCode);
           _databaseServices
               .storePhoneNumberInformation(_auth.currentUser?.phoneNumber);
-          Get.to(RefferalCodeScreen(refferalCode));
+          Get.to(ProfileScreen());
         } else {
           print(
               "signInWithPhoneAuthCredential + ${authCredential.additionalUserInfo!.isNewUser} is a not a new user");
           setState(() {
             _showCircularProgression = false;
             Get.snackbar("Returning User", "Regular Customer",
-                overlayColor: Colors.grey, colorText: Colors.white);
+                overlayColor: Colors.grey, colorText: Colors.black);
           });
 
           Get.to(HomeScreen());
@@ -59,7 +59,12 @@ class _OtpScreenState extends State<OtpScreen> {
       }
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Verify OTP Error", "$e",
-          overlayColor: Colors.grey, colorText: Colors.white);
+          overlayColor: Colors.grey, colorText: Colors.black);
+      setState(() {
+        _showCircularProgression = false;
+        Get.snackbar("try again", "",
+            overlayColor: Colors.grey, colorText: Colors.black);
+      });
     }
 
     setState(() {
@@ -83,12 +88,12 @@ class _OtpScreenState extends State<OtpScreen> {
             Container(
               padding: const EdgeInsets.only(left: 40.0, right: 40, top: 20),
               child: const Text(
-                "Please enter the 6 digit verification code we sent to you.",
+                "Enter the valid verification code",
                 textAlign: TextAlign.justify,
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: "Roboto",
-                  color: Color(0xFFF4F4F4),
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -100,11 +105,10 @@ class _OtpScreenState extends State<OtpScreen> {
 
               borderWidth: 3,
               autoFocus: true,
-              focusedBorderColor: Colors.green,
+              focusedBorderColor: Color(0xffB983FF),
               textStyle: const TextStyle(
-                color: Colors.white,
+                color: Colors.black,
               ),
-              borderColor: const Color(0xFFF4F4F4),
               showFieldAsBox: true,
               onCodeChanged: (String code) {},
               onSubmit: (String verificationCode) {
@@ -120,18 +124,15 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.transparent,
-                        border: Border.all(
-                          color: Color(0xFFF4F4F4),
-                        ),
+                        border: Border.all(color: Colors.white),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       height: 50,
                       width: MediaQuery.of(context).size.width * 0.8,
                       child: Container(
-                          padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent),
+                                  primary: Color(0xffB983FF)),
                               onPressed: () async {
                                 setState(() {
                                   _showCircularProgression = true;
@@ -157,8 +158,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   Text(
                                     "Confirm",
                                     style: TextStyle(
-                                      fontFamily: "Roboto",
-                                    ),
+                                        fontFamily: "Roboto",
+                                        color: Colors.black),
                                   ),
                                 ],
                               ))),
@@ -167,18 +168,21 @@ class _OtpScreenState extends State<OtpScreen> {
           ],
         ),
       ),
-      backgroundColor: Color(0xFF0E0D06),
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
         centerTitle: true,
         title: const Text(
           "OTP",
           style: TextStyle(
             fontFamily: "Roboto",
-            color: Color(0xFFF4F4F4),
+            color: Colors.black,
           ),
         ),
         elevation: 0,
-        backgroundColor: Color(0xFF0E0D06),
+        backgroundColor: Colors.white,
       ),
     );
   }

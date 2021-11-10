@@ -139,8 +139,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
         centerTitle: true,
-        title: Text("Profile Information"),
+        title: Text(
+          "Profile Information",
+          style: TextStyle(color: Colors.black),
+        ),
       ),
       body: SingleChildScrollView(
         child: isLoading
@@ -165,8 +172,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: isUploading
                             ? CircularProgressIndicator()
                             : CircleAvatar(
-                                backgroundImage: NetworkImage(profileImage),
-                                maxRadius: 55,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 18.0),
+                                  child: Icon(
+                                    Icons.person_add_alt_1,
+                                    color: Colors.black,
+                                    size: 90,
+                                  ),
+                                ),
+                                backgroundColor: Color(0xFFB983FF),
+                                maxRadius: 60,
                               ),
                       ),
                     ),
@@ -228,22 +243,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Container(
                         height: 45,
                         child: TextField(
+                          maxLength: 30,
                           controller: _fullAddressController,
                           onSubmitted: (value) {
                             _fullAddressController.text = value;
                           },
                           decoration: InputDecoration(
-                              hintMaxLines: 3,
                               labelText: 'Full Address',
                               labelStyle: TextStyle(fontSize: 13),
                               enabledBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(width: 1.5, color: Colors.grey),
+                                    BorderSide(width: 1.2, color: Colors.grey),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(width: 1.5, color: Colors.blue),
+                                    BorderSide(width: 1.2, color: Colors.blue),
                                 borderRadius: BorderRadius.circular(10.0),
                               )),
                         ),
@@ -269,13 +284,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onSubmitted: (value) {
                                     print(localities);
                                     print("Submited");
-                                    _pinCodeTextController.text = value;
                                     setState(() {
+                                      _pinCodeTextController.text = value;
                                       getLocationByPostalCode();
                                     });
                                   },
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
+                                      suffix: InkWell(
+                                          onTap: () {
+                                            print(localities);
+                                            print("Submited");
+                                            setState(() {
+                                              getLocationByPostalCode();
+                                            });
+                                          },
+                                          child: Text("Check")),
+                                      suffixStyle: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline),
                                       hintMaxLines: 3,
                                       labelText: 'Pin Code',
                                       labelStyle: TextStyle(fontSize: 13),
