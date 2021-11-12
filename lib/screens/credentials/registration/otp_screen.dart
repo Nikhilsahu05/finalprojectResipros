@@ -30,10 +30,10 @@ class _OtpScreenState extends State<OtpScreen> {
               padding: const EdgeInsets.only(left: 40.0, right: 40, top: 20),
               child: const Text(
                 "Enter the valid verification code",
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: "Karla",
                   fontSize: 16,
-                  fontFamily: "Roboto",
                   color: Colors.black,
                 ),
               ),
@@ -46,7 +46,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
               borderWidth: 3,
               autoFocus: true,
-              focusedBorderColor: Color(0xffB983FF),
+              focusedBorderColor: Color(0xff00adb5),
               textStyle: const TextStyle(
                 color: Colors.black,
               ),
@@ -59,43 +59,45 @@ class _OtpScreenState extends State<OtpScreen> {
             const SizedBox(
               height: 75,
             ),
+            Flexible(
+              flex: 7,
+              child: Container(
+                height: 300,
+              ),
+            ),
             _showCircularProgression
                 ? CircularProgressIndicator()
                 : Flexible(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width * 0.8,
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffB983FF)),
-                              onPressed: () {
-                                Get.to(ProfileScreen());
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.check_circle_outline,
-                                    color: Colors.green,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    "Confirm",
-                                    style: TextStyle(
-                                        fontFamily: "Roboto",
-                                        color: Colors.black),
-                                  ),
-                                ],
-                              ))),
+                        height: 45,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF4D61A8)),
+                            onPressed: () {
+                              Get.off(ProfileScreen());
+                            },
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.check_circle_outline,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "Confirm",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            )),
+                      ),
                     ),
                   ),
           ],
@@ -103,14 +105,25 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+            size: 32,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         centerTitle: true,
         title: const Text(
-          "OTP",
+          "One Time Password",
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: "Roboto",
+            fontFamily: "Karla",
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
             color: Colors.black,
           ),
         ),
