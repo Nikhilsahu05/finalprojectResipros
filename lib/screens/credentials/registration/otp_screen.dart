@@ -1,17 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
-import 'package:resipros/screens/database_services.dart';
 import 'package:resipros/screens/profile_screen.dart';
 
-import '../../home_screen.dart';
-
 class OtpScreen extends StatefulWidget {
-  var verificationId;
-
-  OtpScreen(this.verificationId);
-
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
@@ -20,57 +12,6 @@ class _OtpScreenState extends State<OtpScreen> {
   String refferalCode = " ";
 
   bool _showCircularProgression = false;
-
-  void signInWithPhoneAuthCredential(
-      PhoneAuthCredential phoneAuthCredential) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-
-    DataBaseServices _databaseServices = DataBaseServices();
-
-    final authCredential =
-        await _auth.signInWithCredential(phoneAuthCredential);
-
-    try {
-      if (authCredential.user != null) {
-        if (authCredential.additionalUserInfo!.isNewUser) {
-          setState(() {
-            refferalCode = _auth.currentUser!.uid.removeAllWhitespace
-                .substring(0, 6)
-                .toUpperCase();
-            Get.snackbar("New User", "First Time Registered",
-                overlayColor: Colors.grey, colorText: Colors.black);
-          });
-
-          _databaseServices.storeRefferalCode(refferalCode);
-          _databaseServices
-              .storePhoneNumberInformation(_auth.currentUser?.phoneNumber);
-          Get.to(ProfileScreen());
-        } else {
-          print(
-              "signInWithPhoneAuthCredential + ${authCredential.additionalUserInfo!.isNewUser} is a not a new user");
-          setState(() {
-            _showCircularProgression = false;
-            Get.snackbar("Returning User", "Regular Customer",
-                overlayColor: Colors.grey, colorText: Colors.black);
-          });
-
-          Get.to(HomeScreen());
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar("Verify OTP Error", "$e",
-          overlayColor: Colors.grey, colorText: Colors.black);
-      setState(() {
-        _showCircularProgression = false;
-        Get.snackbar("try again", "",
-            overlayColor: Colors.grey, colorText: Colors.black);
-      });
-    }
-
-    setState(() {
-      _showCircularProgression = false;
-    });
-  }
 
   TextEditingController _otpController = TextEditingController();
 
@@ -133,16 +74,8 @@ class _OtpScreenState extends State<OtpScreen> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: Color(0xffB983FF)),
-                              onPressed: () async {
-                                setState(() {
-                                  _showCircularProgression = true;
-                                });
-                                PhoneAuthCredential phoneAuthCredential =
-                                    PhoneAuthProvider.credential(
-                                        verificationId: widget.verificationId,
-                                        smsCode: _otpController.text);
-                                signInWithPhoneAuthCredential(
-                                    phoneAuthCredential);
+                              onPressed: () {
+                                Get.to(ProfileScreen());
                               },
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,

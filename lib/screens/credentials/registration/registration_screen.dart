@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:resipros/screens/credentials/registration/otp_screen.dart';
 
 import 'otp_screen.dart';
 
@@ -13,9 +13,6 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  late String verificationId;
-
   TextEditingController _phoneNumberController = TextEditingController();
 
   bool _showCircularIndication = false;
@@ -43,7 +40,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             Container(
               padding: const EdgeInsets.only(left: 40.0, right: 40, top: 20),
               child: const Text(
-                "Please enter your phone number ! ",
+                "What's your phone number?",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -134,19 +131,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Color(0xFFB983FF)),
-                          onPressed: () async {
-                            if (_phoneNumberController.text.length == 10) {
-                              setState(() {
-                                _showCircularIndication = true;
-                                print(_showCircularIndication);
-                              });
-                              _verificationPhone();
-                              print(_showCircularIndication);
-                            } else {
-                              Get.snackbar(
-                                  'Incorrect', "Please Enter Valid Number",
-                                  overlayColor: Colors.grey);
-                            }
+                          onPressed: () {
+                            Get.to(OtpScreen());
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -171,52 +157,5 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
-  }
-
-  Future _verificationPhone() async {
-    await _auth.verifyPhoneNumber(
-        phoneNumber: "+91" + _phoneNumberController.text,
-        verificationCompleted: (phoneAuthCredential) async {
-          try {
-            setState(() {
-              _showCircularIndication = false;
-              print(" $phoneAuthCredential  verificationCompleted");
-            });
-          } on Exception catch (e) {
-            Get.snackbar("Verification Field", "Try After Sometime",
-                overlayColor: Colors.grey);
-            print("Exception on verificationPHONE + $e");
-          }
-        },
-        verificationFailed: (verificationFailed) async {
-          setState(() {
-            _showCircularIndication = false;
-            try {
-              print(" $verificationFailed  verification Field");
-            } on Exception catch (e) {
-              Get.snackbar("Verification Field", "Try After Sometime",
-                  overlayColor: Colors.grey);
-            }
-          });
-        },
-        codeSent: (verificationId, resendingToken) async {
-          try {
-            setState(() {
-              print("$verificationId + $resendingToken + codeSENT");
-              Get.snackbar("Sending OTP", "OTP has been sent",
-                  overlayColor: Colors.grey);
-              Get.to(OtpScreen(verificationId));
-              _showCircularIndication = false;
-            });
-          } on Exception catch (e) {
-            Get.snackbar("Code Sent Field", "Try After Sometime",
-                overlayColor: Colors.grey);
-          }
-        },
-        codeAutoRetrievalTimeout: (codeAutoRetrievalTimeout) async {
-          setState(() {
-            _showCircularIndication = false;
-          });
-        });
   }
 }

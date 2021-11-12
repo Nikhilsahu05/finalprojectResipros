@@ -1,11 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:resipros/screens/database_services.dart';
-
 import 'interest_field_screen.dart';
 
 class WorkProfileScreen extends StatefulWidget {
@@ -16,38 +12,6 @@ class WorkProfileScreen extends StatefulWidget {
 class _WorkProfileScreenState extends State<WorkProfileScreen> {
   bool _showIndicator = false;
 
-  void setWorkInformationdb() {
-    setState(() {
-      _showIndicator = true;
-    });
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    FirebaseFirestore _firebasedb = FirebaseFirestore.instance;
-    try {
-      _firebasedb
-          .collection(_auth.currentUser!.uid)
-          .doc("work_information")
-          .set({
-        "Experience": _selectedExperience,
-        'Skills': _selectedType,
-        "BasisOfWorkDay": checkboxDay,
-        "BasisOfWorkInch": checkboxInch,
-        "BasisOfWorkContract": checkboxContract,
-        "PerDayRangeFrom": _dayPriceRangeFirst.text,
-        "PerDayRangeTo": _dayPriceRangeSecond.text,
-        "PerInchRangeFrom": _InchPriceRangeFirst.text,
-        "PerInchRangeTo": _InchPriceRangeSecond.text,
-      }).then((res) {
-        setState(() {
-          _showIndicator = false;
-        });
-        print("setWorkInformationdb Success");
-      }).catchError((onError) {
-        print('problem on updating data == > $onError');
-      });
-    } on Exception catch (e) {
-      print("Exeption on Updating Data ===> Work Profile + $e");
-    }
-  }
 
   List _experience = ['0 - 5 years', '5-10 years', '10-15 years', '15+ years'];
   List _type = [
@@ -71,7 +35,6 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
   TextEditingController _InchPriceRangeSecond = TextEditingController();
 
   TextEditingController _InchPriceRangeFirst = TextEditingController();
-  DataBaseServices _dataBaseServices = DataBaseServices();
 
   @override
   Widget build(BuildContext context) {
@@ -453,41 +416,7 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                   Center(
                     child: ElevatedButton(
                         onPressed: () {
-                          if (_selectedExperience == null) {
-                            return Get.snackbar(
-                                "Invalid", "Please Select Experience");
-                          }
-                          if (_selectedType == null) {
-                            return Get.snackbar(
-                                "Invalid", "Please Select Type");
-                          }
-                          if (checkboxDay == false &&
-                              checkboxInch == false &&
-                              checkboxContract == false) {
-                            return Get.snackbar("Invalid",
-                                "Please Select Atleast 1 Basis of Work");
-                          }
-                          if (checkboxDay == true) {
-                            if (_dayPriceRangeFirst.text == null) {
-                              return Get.snackbar(
-                                  "Invalid", "Please Enter Price Range");
-                            }
-                            if (_dayPriceRangeSecond.text == null) {
-                              return Get.snackbar(
-                                  "Invalid", "Please Enter Price Range");
-                            }
-                          }
-                          if (checkboxInch == true) {
-                            if (_InchPriceRangeFirst.text == null) {
-                              return Get.snackbar(
-                                  "Invalid", "Please Enter Price Range");
-                            }
-                            if (_InchPriceRangeSecond.text == null) {
-                              return Get.snackbar(
-                                  "Invalid", "Please Enter Price Range");
-                            }
-                          }
-                          setWorkInformationdb();
+
                           Get.offAll(InterestFieldScreen());
                         },
                         child: Text(

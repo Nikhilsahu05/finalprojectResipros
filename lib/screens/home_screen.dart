@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:resipros/constants/constants.dart';
 import 'package:resipros/screens/settings_profile_screen.dart';
 
 import 'manage_address_screen.dart';
@@ -17,8 +14,6 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-FirebaseFirestore firebase = FirebaseFirestore.instance;
-FirebaseAuth auth = FirebaseAuth.instance;
 String profileImageUrl = "https://via.placeholder.com/150";
 String gridImageUrl =
     "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg";
@@ -30,15 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
   PersistentTabController _controller =
       PersistentTabController(initialIndex: 1);
 
-  PageController _pageController = PageController();
   List<Widget> _screens = [
     NotificationScreen(),
     DashboardScreen(),
     SettingsScreen()
   ];
-
-  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  FirebaseAuth _auth = FirebaseAuth.instance;
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
@@ -546,52 +537,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  Future callDatabasePhoneNumber() async {
-    await firebase
-        .collection("${auth.currentUser!.uid}")
-        .doc(dbDocPhoneNumberInformation)
-        .get()
-        .then((value) {
-      print(value.data());
-      setState(() {
-        phoneNumberDashboard = value.data()!["phoneNumber"];
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
-  Future callDatabaseProfileInformation() async {
-    await firebase
-        .collection("${auth.currentUser!.uid}")
-        .doc(dbDocProfileInformation)
-        .get()
-        .then((value) {
-      print(value.data());
-      setState(() {
-        fullNameDashboard = value.data()!["fullName"];
-        profileImageUrl = value.data()!["profileImageURL"];
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
-  Future callDatabaseRefferalInformation() async {
-    await firebase
-        .collection("${auth.currentUser!.uid}")
-        .doc(dbDocRefferalInformation)
-        .get()
-        .then((value) {
-      print(value.data());
-      setState(() {
-        refferalCodeDashboard = value.data()!["refferalCode"];
-      });
-    }).catchError((onError) {
-      print(onError);
-    });
-  }
-
   int timer = 6;
   Future timerCountDown() async {
     await Future.delayed(Duration(seconds: 5));
@@ -603,9 +548,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   void initState() {
-    callDatabasePhoneNumber();
-    callDatabaseProfileInformation();
-    callDatabaseRefferalInformation();
     timerCountDown();
     super.initState();
   }

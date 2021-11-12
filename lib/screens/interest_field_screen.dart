@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:resipros/screens/database_services.dart';
 
 import 'home_screen.dart';
 
@@ -508,43 +507,8 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                           shadowColor: Colors.grey,
                           elevation: 5,
                         ),
-                        onPressed: () async {
-                          DataBaseServices db = DataBaseServices();
-                          if (checkboxConstruction ||
-                              checkboxInterior ||
-                              checkboxPainter ||
-                              checkboxPlumber ||
-                              checkboxElectrician ||
-                              checkboxOther == true) {
-                            print('Pressed');
-                            setState(() {
-                              isLoading = true;
-                            });
-                            await db.storeWorkInterestInformation(
-                                checkboxConstruction,
-                                checkboxBuilding,
-                                checkboxCommercial,
-                                checkboxResidential,
-                                checkboxConstructionRepairing,
-                                checkboxInterior,
-                                checkboxPainter,
-                                checkboxPlumber,
-                                checkboxPlumberFitting,
-                                checkboxPlumberRepairing,
-                                checkboxElectrician,
-                                checkboxElectricianFitting,
-                                checkboxElectricianRepairing,
-                                selectedWorkType);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Get.offAll(LoadingScreen());
-                          } else {
-                            Get.snackbar("Try Again",
-                                'Any One Field Should Be Selected');
-                          }
-
-                          print('${isLoading} value of bool');
+                        onPressed: () {
+                          Get.to(LoadingScreen());
                         },
                       ),
                     )

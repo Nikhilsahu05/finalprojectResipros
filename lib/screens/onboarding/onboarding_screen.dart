@@ -166,7 +166,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     dotWidth: 11.5,
                     dotHeight: 11.5,
                     spacing: 5,
-                    dotColor: Color(0xFFD6D6D6),
+                    dotColor: Color(0xFFe4d0ff),
                     activeDotColor: Color(0xFFB983FF),
                   ),
                 ),
