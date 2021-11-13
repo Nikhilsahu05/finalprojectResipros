@@ -112,7 +112,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
             Flexible(
-              flex: 6,
+              flex: 8,
               child: Container(
                 height: 300,
               ),
@@ -138,37 +138,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             _showCircularIndication
                 ? CircularProgressIndicator()
-                : Flexible(
-                    flex: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 45,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF4D61A8)),
-                            onPressed: () {
-                              Get.to(OtpScreen());
-                            },
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(
-                                  Icons.check_circle_outline,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  "Confirm",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            )),
-                      ),
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 45,
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF4D61A8)),
+                          onPressed: () {
+                            Get.to(OtpScreen());
+                          },
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                "Confirm",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          )),
                     ),
                   ),
           ],

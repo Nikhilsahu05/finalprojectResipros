@@ -111,76 +111,90 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              leading: Icon(Icons.update),
-              onTap: () {
-                print("Latest Option Tapped");
-              },
-              title: Text("Latest"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
+    return MaterialApp(
+      theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.),
+
+          fontFamily: "Karla"),
+      home: Scaffold(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: Icon(Icons.update),
+                onTap: () {
+                  print("Latest Option Tapped");
+                },
+                title: Text("Latest"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              onTap: () {
-                print("Reviews Option Tapped");
-              },
-              title: Text("Reviews"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-              leading: Icon(
-                Icons.reviews,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              onTap: () {
-                print("Photos Uploaded Option Tapped");
-              },
-              title: Text("Photos Uploaded"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-              leading: Icon(
-                Icons.add_to_photos,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {
+                  print("Reviews Option Tapped");
+                },
+                title: Text("Reviews"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+                leading: Icon(
+                  Icons.reviews,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              onTap: () {
-                print("Profile Views Option Tapped");
-              },
-              title: Text("Profile Views"),
-              leading: Icon(
-                Icons.visibility,
-              ),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {
+                  print("Photos Uploaded Option Tapped");
+                },
+                title: Text("Photos Uploaded"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+                leading: Icon(
+                  Icons.add_to_photos,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      appBar: AppBar(
-        title: Text("Notification"),
-        centerTitle: true,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {
+                  print("Profile Views Option Tapped");
+                },
+                title: Text("Profile Views"),
+                leading: Icon(
+                  Icons.visibility,
+                ),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+              ),
+            ),
+          ],
+        ),
+        appBar: AppBar(
+          title: Text("Notification"),
+          centerTitle: true,
+        ),
       ),
     );
   }
@@ -196,152 +210,170 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Dashboard"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Container(
-                height: 250,
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    color: Color(0xFFFFFDD0),
-                    elevation: 8,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 15.0,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "$fullNameDashboard",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12.0),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(profileImageUrl),
-                                maxRadius: 55,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              width: 150,
-                              height: 50,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: 5,
-                                  itemBuilder: (itemBuilder, index) {
-                                    return Icon(
-                                      Icons.star,
-                                      color: index == 4
-                                          ? Colors.grey.shade400
-                                          : Colors.amber,
-                                      size: 30,
-                                    );
-                                  }),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
+    return MaterialApp(
+      theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.),
+
+          fontFamily: "Karla"),
+      home: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text("Dashboard"),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Container(
+                  height: 250,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      color: Color(0xFFFFFDD0),
+                      elevation: 8,
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 15.0),
-                                alignment: Alignment.bottomLeft,
+                                  vertical: 15.0,
+                                ),
+                                alignment: Alignment.center,
                                 child: Text(
-                                  "      $refferalCodeDashboard",
+                                  "$fullNameDashboard",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 )),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 30.0, vertical: 15.0),
-                                alignment: Alignment.bottomLeft,
-                                child: Text(
-                                  "$phoneNumberDashboard",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                          ],
-                        ),
-                      ],
+                          ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(profileImageUrl),
+                                  maxRadius: 55,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Container(
+                                width: 150,
+                                height: 50,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: 5,
+                                    itemBuilder: (itemBuilder, index) {
+                                      return Icon(
+                                        Icons.star,
+                                        color: index == 4
+                                            ? Colors.grey.shade400
+                                            : Colors.amber,
+                                        size: 30,
+                                      );
+                                    }),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 15.0, vertical: 15.0),
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text(
+                                    "      $refferalCodeDashboard",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30.0, vertical: 15.0),
+                                  alignment: Alignment.bottomLeft,
+                                  child: Text(
+                                    "$phoneNumberDashboard",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text("Membership Plan"),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                "Work Uploaded By Customer",
-                style: TextStyle(fontSize: 22),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text("Membership Plan"),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: 5,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, crossAxisSpacing: 4, mainAxisSpacing: 4),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Container(
-                      child: Image.network(
-                        gridImageUrl,
-                        height: 50,
-                        width: 50,
+              SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "Work Uploaded By Customer",
+                  style: TextStyle(fontSize: 22),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: 5,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 4,
+                      mainAxisSpacing: 4),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        child: Image.network(
+                          gridImageUrl,
+                          height: 50,
+                          width: 50,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Divider(
-                thickness: 1.5,
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Divider(
+                  thickness: 1.5,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -360,170 +392,184 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Settings"),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              horizontalTitleGap: 20,
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(profileImageUrl),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SettingsProfileScreen()),
-                );
-                print("Settings tab profile Option Tapped");
-              },
-              title: Text("${fullNameDashboard}"),
-              subtitle: Text("${phoneNumberDashboard}"),
-              trailing: Text(
-                "Edit",
-                style: TextStyle(color: Colors.blue),
+    return MaterialApp(
+      theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.),
+
+          fontFamily: "Karla"),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Settings"),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                horizontalTitleGap: 20,
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(profileImageUrl),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SettingsProfileScreen()),
+                  );
+                  print("Settings tab profile Option Tapped");
+                },
+                title: Text("${fullNameDashboard}"),
+                subtitle: Text("${phoneNumberDashboard}"),
+                trailing: Text(
+                  "Edit",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                  horizontalTitleGap: 20,
+                  leading: Icon(
+                    Icons.notifications_active,
+                    color: Colors.blue,
+                  ),
+                  title: Text("Notifications"),
+                  subtitle: Text("Turn on/off Notification"),
+                  trailing: Switch(
+                    onChanged: (bool value) {
+                      setState(() {
+                        print(value);
+                        valueNotification = value;
+                      });
+                    },
+                    value: valueNotification,
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
                 horizontalTitleGap: 20,
                 leading: Icon(
-                  Icons.notifications_active,
+                  Icons.home,
                   color: Colors.blue,
                 ),
-                title: Text("Notifications"),
-                subtitle: Text("Turn on/off Notification"),
-                trailing: Switch(
-                  onChanged: (bool value) {
-                    setState(() {
-                      print(value);
-                      valueNotification = value;
-                    });
-                  },
-                  value: valueNotification,
-                )),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              horizontalTitleGap: 20,
-              leading: Icon(
-                Icons.home,
-                color: Colors.blue,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ManageAddressScreen()),
-                );
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ManageAddressScreen()),
+                  );
 
-                print("Settings tab Address Option Tapped");
-              },
-              title: Text("My Address"),
-              subtitle: Text("Manage Work Addresses"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              horizontalTitleGap: 20,
-              leading: Icon(
-                Icons.contact_support,
-                color: Colors.blue,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ManageAddressScreen()),
-                );
-
-                print("Contact us Option Tapped");
-              },
-              title: Text("Contact Us"),
-              subtitle: Text("Feel free to contact us"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              horizontalTitleGap: 20,
-              leading: Icon(
-                Icons.contact_phone,
-                color: Colors.blue,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ManageAddressScreen()),
-                );
-
-                print("About us Address Option Tapped");
-              },
-              title: Text("About us"),
-              subtitle: Text("Know More About Resipros"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ListTile(
-              horizontalTitleGap: 20,
-              leading: Icon(
-                Icons.report,
-                color: Colors.blue,
-              ),
-              onTap: () {
-                print("Settings Report  Option Tapped");
-              },
-              title: Text("Report"),
-              subtitle: Text("Report any Anonymous Activity"),
-              trailing: Icon(
-                Icons.chevron_right,
-                size: 35,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.logout),
-                    Text("Logout"),
-                  ],
+                  print("Settings tab Address Option Tapped");
+                },
+                title: Text("My Address"),
+                subtitle: Text("Manage Work Addresses"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
                 ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                horizontalTitleGap: 20,
+                leading: Icon(
+                  Icons.contact_support,
+                  color: Colors.blue,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ManageAddressScreen()),
+                  );
+
+                  print("Contact us Option Tapped");
+                },
+                title: Text("Contact Us"),
+                subtitle: Text("Feel free to contact us"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                horizontalTitleGap: 20,
+                leading: Icon(
+                  Icons.contact_phone,
+                  color: Colors.blue,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ManageAddressScreen()),
+                  );
+
+                  print("About us Address Option Tapped");
+                },
+                title: Text("About us"),
+                subtitle: Text("Know More About Resipros"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                horizontalTitleGap: 20,
+                leading: Icon(
+                  Icons.report,
+                  color: Colors.blue,
+                ),
+                onTap: () {
+                  print("Settings Report  Option Tapped");
+                },
+                title: Text("Report"),
+                subtitle: Text("Report any Anonymous Activity"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 35,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.logout),
+                      Text("Logout"),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -556,24 +602,38 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return timer == 0
         ? HomeScreen()
-        : Material(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SpinKitDoubleBounce(
-                    color: Colors.blue,
-                    size: 150,
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    "Please Wait! While Analysing Your Data...",
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                ],
+        : MaterialApp(
+            theme: ThemeData(
+                // This is the theme of your application.
+                //
+                // Try running your application with "flutter run". You'll see the
+                // application has a blue toolbar. Then, without quitting the app, try
+                // changing the primarySwatch below to Colors.green and then invoke
+                // "hot reload" (press "r" in the console where you ran "flutter run",
+                // or simply save your changes to "hot reload" in a Flutter IDE).
+                // Notice that the counter didn't reset back to zero; the application
+                // is not restarted.),
+
+                fontFamily: "Karla"),
+            home: Material(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SpinKitDoubleBounce(
+                      color: Colors.blue,
+                      size: 150,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Text(
+                      "Please Wait! While Analysing Your Data...",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

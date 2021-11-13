@@ -17,46 +17,45 @@ class InterestFieldScreen extends StatefulWidget {
 class _InterestFieldScreenState extends State<InterestFieldScreen> {
   GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
   bool isLoading = false;
-  var checkboxConstruction = false;
+  var CheckboxConstruction = false;
 
-  var checkboxOther = false;
+  var CheckboxOther = false;
 
-  var checkboxInterior = false;
+  var CheckboxInterior = false;
 
-  var checkboxPlumber = false;
+  var CheckboxPlumber = false;
 
-  var checkboxElectrician = false;
+  var CheckboxElectrician = false;
 
-  var checkboxPainter = false;
+  var CheckboxPainter = false;
 
-  var checkboxCarpainter = false;
+  var CheckboxCarpainter = false;
 
-  var checkboxBuilding = false;
+  var CheckboxBuilding = false;
 
-  var checkboxResidential = false;
+  var CheckboxResidential = false;
 
-  var checkboxCommercial = false;
+  var CheckboxCommercial = false;
 
-  var checkboxConstructionRepairing = false;
+  var CheckboxConstructionRepairing = false;
 
-  var checkboxPlumberFitting = false;
+  var CheckboxPlumberFitting = false;
 
-  var checkboxPlumberRepairing = false;
+  var CheckboxPlumberRepairing = false;
 
-  var checkboxElectricianRepairing = false;
+  var CheckboxElectricianRepairing = false;
 
-  var checkboxElectricianFitting = false;
+  var CheckboxElectricianFitting = false;
 
   List<String> typesOfWork = [
     'Carpentry',
     'Plasterwork',
     'Steel construction ',
     "Sheet metal ",
-    "Glass ",
-    "Coating ",
+    "Glass work",
+    "Coating work",
     "Waterproofing ",
     "Thermal insulation ",
-    "Telecommunications ",
     "Landscape gardening",
     "Firefighting facilities ",
     "Waste facilities ",
@@ -64,375 +63,515 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
   ];
 
   List selectedWorkType = [];
+  ScrollController _scrollController = new ScrollController(
+    keepScrollOffset: true,
+  );
 
   bool isloadingDialog = false;
 
   ScrollController _controller = ScrollController();
   ScrollController _controllerScroll = ScrollController();
+  FocusNode? myFocusNode;
+
+  @override
+  void initState() {
+    myFocusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    myFocusNode!.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     String currentText = "";
-    return Scaffold(
-      body: isLoading == true
-          ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                  child: SpinKitFadingCube(
-                color: Colors.blueAccent,
-                size: 100.0,
-              )),
-            )
-          : SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1.5,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "YOU ARE SUPERIOR IN ?",
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold),
+    return MaterialApp(
+      theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.),
+
+          fontFamily: "Karla"),
+      home: Scaffold(
+        body: isLoading == true
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                    child: SpinKitFadingCube(
+                  color: Colors.blueAccent,
+                  size: 100.0,
+                )),
+              )
+            : SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 1.8,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "You Are Interested In ?",
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
-                      title:
-                          Text("Construction & Repairing", style: TextStyle()),
-                      value: checkboxConstruction,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxConstruction = newValue!;
-                        });
-                        if (checkboxConstruction == false) {
-                          setState(() {
-                            checkboxBuilding = false;
-
-                            checkboxResidential = false;
-
-                            checkboxCommercial = false;
-
-                            checkboxConstructionRepairing = false;
-                          });
-                        }
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 45.0),
-                      child: Visibility(
-                        visible: checkboxConstruction,
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Building ",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxBuilding,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxBuilding = newValue!;
-                              });
-                              if (checkboxBuilding == false) {
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              value: CheckboxConstruction,
+                              onChanged: (newValue) {
                                 setState(() {
-                                  checkboxResidential = false;
-                                  checkboxCommercial = false;
+                                  CheckboxConstruction = newValue!;
                                 });
-                              }
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: checkboxBuilding == true &&
-                          checkboxConstruction == true,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 100),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Residential",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxResidential,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxResidential = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: checkboxBuilding == true &&
-                          checkboxConstruction == true,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 100),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Commercial",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxCommercial,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxCommercial = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: checkboxConstruction == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Repairing ",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxConstructionRepairing,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxConstructionRepairing = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
-                      title: Text("Interior Designer"),
-                      value: checkboxInterior,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxInterior = newValue!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
+                                if (CheckboxConstruction == false) {
+                                  setState(() {
+                                    CheckboxBuilding = false;
 
-                      title: Text("Painter"),
-                      value: checkboxPainter,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxPainter = newValue!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
-                      title: Text("Plumber"),
-                      value: checkboxPlumber,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxPlumber = newValue!;
-                        });
-                        if (checkboxPlumber == false) {
-                          setState(() {
-                            checkboxPlumberFitting = false;
-                            checkboxPlumberRepairing = false;
-                          });
-                        }
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    Visibility(
-                      visible: checkboxPlumber == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Full Fitting ",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxPlumberFitting,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxPlumberFitting = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
+                                    CheckboxResidential = false;
+
+                                    CheckboxCommercial = false;
+
+                                    CheckboxConstructionRepairing = false;
+                                  });
+                                }
+                              },
+                            ),
+                            Text(
+                              "Construction & Repairing",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Visibility(
-                      visible: checkboxPlumber == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Repairing",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxPlumberRepairing,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxPlumberRepairing = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
-                      title: Text("Electrician"),
-                      value: checkboxElectrician,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxElectrician = newValue!;
-                        });
-                        if (checkboxElectrician == false) {
-                          setState(() {
-                            checkboxElectricianFitting = false;
-                            checkboxElectricianRepairing = false;
-                          });
-                        }
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    Visibility(
-                      visible: checkboxElectrician == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Full Fitting",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxElectricianFitting,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxElectricianFitting = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: checkboxElectrician == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 45),
-                        child: FadeIn(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn,
-                          child: CheckboxListTile(
-                            activeColor: Colors.green,
-                            title: Text("Repairing",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                            value: checkboxElectricianRepairing,
-                            onChanged: (newValue) {
-                              setState(() {
-                                checkboxElectricianRepairing = newValue!;
-                              });
-                            },
-                            controlAffinity: ListTileControlAffinity
-                                .leading, //  <-- leading Checkbox
-                          ),
-                        ),
-                      ),
-                    ),
-                    CheckboxListTile(
-                      activeColor: Colors.green,
-                      title: Text("Other Fields"),
-                      value: checkboxOther,
-                      onChanged: (newValue) {
-                        setState(() {
-                          checkboxOther = newValue!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    ),
-                    Visibility(
-                      visible: checkboxOther == true,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30.0, vertical: 7),
-                        child: Center(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                        child: Visibility(
+                          visible: CheckboxConstruction,
                           child: FadeIn(
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeIn,
-                            child: Container(
-                              height: 45,
-                              child: SimpleAutoCompleteTextField(
-                                key: key,
-                                suggestions: typesOfWork,
-                                decoration: InputDecoration(
-                                  hintText: 'Types Of Work',
-                                ),
-                                clearOnSubmit: true,
-                                textChanged: (text) => currentText = text,
-                                textSubmitted: (text) => setState(() {
-                                  if (text != "") {
-                                    selectedWorkType.add(text);
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  activeColor: Color(0xff00adb5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: CheckboxBuilding,
+                                  onChanged: (newValue) {
                                     setState(() {
-                                      typesOfWork.remove(text);
+                                      CheckboxBuilding = newValue!;
                                     });
-                                  }
-                                }),
+                                    if (CheckboxBuilding == false) {
+                                      setState(() {
+                                        CheckboxResidential = false;
+                                        CheckboxCommercial = false;
+                                      });
+                                    }
+                                  },
+                                ),
+                                Text("Building ",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxBuilding == true &&
+                            CheckboxConstruction == true,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 100),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  activeColor: Color(0xff00adb5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: CheckboxResidential,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      CheckboxResidential = newValue!;
+                                    });
+                                  },
+                                ),
+                                Text("Residential",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxBuilding == true &&
+                            CheckboxConstruction == true,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 100),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  activeColor: Color(0xff00adb5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: CheckboxCommercial,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      CheckboxCommercial = newValue!;
+                                    });
+                                  },
+                                ),
+                                Text("Commercial",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxConstruction == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  activeColor: Color(0xff00adb5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: CheckboxConstructionRepairing,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      CheckboxConstructionRepairing = newValue!;
+                                    });
+                                  },
+                                ),
+                                Text("Repairing ",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              value: CheckboxInterior,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  CheckboxInterior = newValue!;
+                                });
+                              },
+                            ),
+                            Text(
+                              "Interior Designer",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              value: CheckboxPainter,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  CheckboxPainter = newValue!;
+                                });
+                              },
+                            ),
+                            Text(
+                              "Painter",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              value: CheckboxPlumber,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  CheckboxPlumber = newValue!;
+                                });
+                                if (CheckboxPlumber == false) {
+                                  setState(() {
+                                    CheckboxPlumberFitting = false;
+                                    CheckboxPlumberRepairing = false;
+                                  });
+                                }
+                              },
+                            ),
+                            Text(
+                              "Plumber",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxPlumber == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    activeColor: Color(0xff00adb5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    value: CheckboxPlumberFitting,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        CheckboxPlumberFitting = newValue!;
+                                      });
+                                    },
+                                  ),
+                                  Text("Full Fitting ",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black)),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Visibility(
-                      visible: checkboxOther == true,
-                      child: Flexible(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(maxHeight: 200),
+                      Visibility(
+                        visible: CheckboxPlumber == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    activeColor: Color(0xff00adb5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    value: CheckboxPlumberRepairing,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        CheckboxPlumberRepairing = newValue!;
+                                      });
+                                    },
+                                  ),
+                                  Text("Repairing",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              value: CheckboxElectrician,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  CheckboxElectrician = newValue!;
+                                });
+                                if (CheckboxElectrician == false) {
+                                  setState(() {
+                                    CheckboxElectricianFitting = false;
+                                    CheckboxElectricianRepairing = false;
+                                  });
+                                }
+                              },
+                            ),
+                            Text(
+                              "Electrician",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxElectrician == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    activeColor: Color(0xff00adb5),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    value: CheckboxElectricianFitting,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        CheckboxElectricianFitting = newValue!;
+                                      });
+                                    },
+                                  ),
+                                  Text("Full Fitting",
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxElectrician == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 45),
+                          child: FadeIn(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: Color(0xff00adb5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: CheckboxElectricianRepairing,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      CheckboxElectricianRepairing = newValue!;
+                                    });
+                                  },
+                                ),
+                                Text("Repairing",
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Color(0xff00adb5),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+
+                              value: CheckboxOther,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  myFocusNode!.requestFocus();
+                                  CheckboxOther = newValue!;
+                                  _scrollController.jumpTo(
+                                      MediaQuery.of(context).size.height *
+                                          0.45);
+                                  print(_scrollController.offset);
+                                });
+                              },
+                              //  <-- leading Checkbox
+                            ),
+                            Text(
+                              "Other Fields",
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxOther == true,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30.0, vertical: 18),
+                          child: Center(
+                            child: FadeIn(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeIn,
+                              child: Container(
+                                height: 45,
+                                child: SimpleAutoCompleteTextField(
+                                  focusNode: myFocusNode,
+                                  key: key,
+                                  suggestions: typesOfWork,
+                                  decoration: InputDecoration(
+                                    hintText: 'Types Of Work',
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                  ),
+                                  clearOnSubmit: true,
+                                  textChanged: (text) => currentText = text,
+                                  textSubmitted: (text) => setState(() {
+                                    myFocusNode!.requestFocus();
+                                    if (text != "") {
+                                      selectedWorkType.add(text);
+                                      setState(() {
+                                        typesOfWork.remove(text);
+                                      });
+                                    }
+                                  }),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: CheckboxOther == true,
+                        child: Flexible(
                           child: ListView.builder(
                             primary: false,
                             shrinkWrap: true,
@@ -440,7 +579,7 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                             itemBuilder: (itemBuilder, context) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 25.0, vertical: 12),
+                                    horizontal: 25.0, vertical: 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -496,29 +635,68 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        child: Text('Save Changes'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          onPrimary: Colors.white,
-                          shadowColor: Colors.grey,
-                          elevation: 5,
+                      Flexible(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 18.0, vertical: 18),
+                          child: Container(
+                            height: 45,
+                            width: MediaQuery.of(context).size.width,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color(0xFF4D61A8)),
+                                onPressed: () {
+                                  Get.to(LoadingScreen());
+                                },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.check_circle_outline,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      "Confirm",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ),
-                        onPressed: () {
-                          Get.to(LoadingScreen());
-                        },
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: Colors.black,
+              size: 32,
             ),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Work Profile"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            "Superiority",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Karla",
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
       ),
     );
   }
