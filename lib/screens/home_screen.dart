@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
@@ -226,8 +229,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("Dashboard"),
+          elevation: 0,
+          backgroundColor: Colors.white,
           centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Dashboard",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Karla",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(
+                width: 80,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.black,
+                  size: 32,
+                ),
+                onPressed: () => exit(0),
+              ),
+            ],
+          ),
         ),
         body: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -244,82 +274,74 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      color: Color(0xFFFFFDD0),
+                      color: Color(0xff1f1f1f),
                       elevation: 8,
-                      child: Column(
+                      child: Row(
                         children: [
-                          Center(
-                            child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 15.0,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 18.0),
+                            child: Expanded(
+                              flex: 3,
+                              child: CircleAvatar(
+                                child: CachedNetworkImage(
+                                  imageUrl: profileImageUrl,
                                 ),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "$fullNameDashboard",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                )),
+                                maxRadius: 45,
+                              ),
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0),
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(profileImageUrl),
-                                  maxRadius: 55,
+                          Expanded(
+                            flex: 7,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding:
+                                      EdgeInsets.only(left: 22.0, top: 45.0),
+                                  child: Text(
+                                    "PhoolChand Swami",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white),
+                                  ),
+                                  alignment: Alignment.centerLeft,
                                 ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Container(
-                                width: 150,
-                                height: 50,
-                                child: ListView.builder(
+                                Container(
+                                  padding:
+                                      EdgeInsets.only(left: 35.0, top: 18.0),
+                                  child: Text(
+                                    "+91 8349337625",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white),
+                                  ),
+                                  alignment: Alignment.centerLeft,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 32.0),
+                                  height: 60,
+                                  width: 300,
+                                  child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount: 5,
-                                    itemBuilder: (itemBuilder, index) {
-                                      return Icon(
-                                        Icons.star,
-                                        color: index == 4
-                                            ? Colors.grey.shade400
-                                            : Colors.amber,
-                                        size: 30,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        child: Icon(
+                                          Icons.star,
+                                          size: 25,
+                                          color: index == 4
+                                              ? Colors.grey
+                                              : Color(0xff00adb5),
+                                        ),
                                       );
-                                    }),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15.0, vertical: 15.0),
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    "      $refferalCodeDashboard",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 30.0, vertical: 15.0),
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    "$phoneNumberDashboard",
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                            ],
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -327,50 +349,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text("Membership Plan"),
-              ),
               SizedBox(
                 height: 25,
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  "Work Uploaded By Customer",
-                  style: TextStyle(fontSize: 22),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: 5,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 4,
-                      mainAxisSpacing: 4),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Container(
-                        child: Image.network(
-                          gridImageUrl,
-                          height: 50,
-                          width: 50,
-                        ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Posted By Customer",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: Text(""),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: 8.0),
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.chevron_right,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: Divider(
-                  thickness: 1.5,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 9,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: 3,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 3,
+                            mainAxisSpacing: 3),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                              child: Image.network(
+                                gridImageUrl,
+                                height: 50,
+                                width: 50,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.collections,
+                          size: 35,
+                        )),
+                  ),
+                ],
               ),
             ],
           ),
