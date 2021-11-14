@@ -1,14 +1,17 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:resipros/screens/settings_profile_screen.dart';
 
+import 'dashboard_photos_by_you.dart';
 import 'manage_address_screen.dart';
+import 'membership_plan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -23,6 +26,8 @@ String gridImageUrl =
 String fullNameDashboard = "Full Name";
 String phoneNumberDashboard = "xxx xxx xxxx";
 String refferalCodeDashboard = "xx xxxx";
+
+List postedByCustomer = [];
 
 class _HomeScreenState extends State<HomeScreen> {
   PersistentTabController _controller =
@@ -59,8 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print("  $profileImageUrl =====> Woooooo got image url");
+    print("HomeScreen Started");
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("HomeScreen Closed");
+    super.dispose();
   }
 
   @override
@@ -112,6 +123,18 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  @override
+  void initState() {
+    print("NotificationScreen Started");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("NotificationScreen Closed");
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -212,6 +235,84 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
+  void initState() {
+    print("DashboardScreen Started");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("DashboardScreen Closed");
+    super.dispose();
+  }
+
+  List<Widget> _listOfPostedByCustomer = [
+    Container(
+      height: 100,
+      width: 100,
+      child: Image.network(
+        "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg",
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: Image.network(
+        "https://miro.medium.com/max/1200/1*P59574JT5sw1wEgSIxeQAQ.jpeg",
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: Image.network(
+        'https://cdn.pixabay.com/photo/2017/08/03/21/37/construction-2578410_960_720.jpg',
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: IconButton(
+        icon: Icon(
+          Icons.collections,
+          size: 35,
+        ),
+        onPressed: () {
+          print("Album Icon Pressed");
+        },
+      ),
+    )
+  ];
+
+  List<Widget> _listOfPostedByYou = [
+    Container(
+      child: Image.network(
+        "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg",
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: Image.network(
+        "https://miro.medium.com/max/1200/1*P59574JT5sw1wEgSIxeQAQ.jpeg",
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: Image.network(
+        'https://cdn.pixabay.com/photo/2017/08/03/21/37/construction-2578410_960_720.jpg',
+        fit: BoxFit.fill,
+      ),
+    ),
+    Container(
+      child: IconButton(
+        icon: Icon(
+          Icons.collections,
+          size: 35,
+        ),
+        onPressed: () {
+          Get.to(PhotosByYou());
+          print("Album Icon Pressed");
+        },
+      ),
+    )
+  ];
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
@@ -264,89 +365,176 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(
-                child: Container(
-                  height: 250,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      color: Color(0xff1f1f1f),
-                      elevation: 8,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 18.0),
-                            child: Expanded(
-                              flex: 3,
-                              child: CircleAvatar(
-                                child: CachedNetworkImage(
-                                  imageUrl: profileImageUrl,
+              Container(
+                height: 250,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    color: Color(0xff1f1f1f),
+                    elevation: 8,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20, left: 25),
+                              child: Flexible(
+                                flex: 3,
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(profileImageUrl),
+                                  maxRadius: 45,
                                 ),
-                                maxRadius: 45,
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 7,
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding:
-                                      EdgeInsets.only(left: 22.0, top: 45.0),
-                                  child: Text(
-                                    "PhoolChand Swami",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.white),
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                ),
-                                Container(
-                                  padding:
-                                      EdgeInsets.only(left: 35.0, top: 18.0),
-                                  child: Text(
-                                    "+91 8349337625",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.white),
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(left: 32.0),
-                                  height: 60,
-                                  width: 300,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: 5,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 25,
-                                          color: index == 4
-                                              ? Colors.grey
-                                              : Color(0xff00adb5),
+                            Flexible(
+                              flex: 7,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 22.0, top: 45.0),
+                                        child: Text(
+                                          "PhoolChand Swami",
+                                          style: TextStyle(
+                                              letterSpacing: 2.0,
+                                              fontSize: 16,
+                                              color: Colors.white),
                                         ),
-                                      );
-                                    },
+                                        alignment: Alignment.centerLeft,
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 18.0,
+                                          ),
+                                          child: Container(
+                                            alignment: Alignment.topRight,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                Get.to(NotificationScreen());
+                                              },
+                                              icon: Icon(Icons.notifications),
+                                              color: Color(0xffebebeb),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(left: 35.0, top: 18.0),
+                                    child: Text(
+                                      "+91 8349337625",
+                                      style: TextStyle(
+                                          letterSpacing: 2.0,
+                                          fontSize: 16,
+                                          color: Colors.white),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 50.0),
+                                    height: 60,
+                                    width: 300,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: 5,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Container(
+                                          child: Icon(
+                                            Icons.star,
+                                            size: 25,
+                                            color: index == 4
+                                                ? Colors.grey
+                                                : Colors.amber,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(MembershipPlanScreen());
+                            },
+                            child: const Text(
+                              "REGULAR MEMBERSHIP",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  letterSpacing: 6.0,
+                                  color: Color(0xff00adb5)),
                             ),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Photos By You",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
+                  Expanded(
+                    flex: 5,
+                    child: Text(""),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: 8.0),
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.to(PhotosByYou());
+                      },
+                      icon: Icon(
+                        Icons.chevron_right,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: 4,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 3,
+                      mainAxisSpacing: 3),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return _listOfPostedByYou[index];
+                  },
                 ),
               ),
               SizedBox(
@@ -359,7 +547,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Posted By Customer",
+                        "Photos By Customer",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
@@ -382,46 +570,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: 4,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 3,
+                      mainAxisSpacing: 3),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return _listOfPostedByCustomer[index];
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
               Row(
                 children: [
-                  Expanded(
-                    flex: 9,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: 3,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 3,
-                            mainAxisSpacing: 3),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Container(
-                              child: Image.network(
-                                gridImageUrl,
-                                height: 50,
-                                width: 50,
-                              ),
-                            ),
-                          );
-                        },
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Reviews By Customer",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    flex: 5,
+                    child: Text(""),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: 8.0),
+                    alignment: Alignment.centerRight,
                     child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.collections,
-                          size: 35,
-                        )),
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.chevron_right,
+                        size: 35,
+                      ),
+                    ),
                   ),
                 ],
+              ),
+              ListTile(
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    "Using for a day. So far all Good. Back side Diamond finish great. Material also Good. Camera - Good, bright picture. Rich in color may be corrected. Display Good.",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                leading: Icon(Icons.account_circle),
+                title: Text(
+                  "Nikhil Sahu",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -440,6 +650,18 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   var valueNotification = false;
+
+  @override
+  void initState() {
+    print("SettingsScreen Started");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("SettingsScreen Closed");
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -634,6 +856,19 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  void initState() {
+    print("Loading Screen Started");
+    timerCountDown();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("Loading Screen Closed");
+    super.dispose();
+  }
+
   int timer = 6;
   Future timerCountDown() async {
     await Future.delayed(Duration(seconds: 5));
@@ -641,12 +876,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
     setState(() {
       timer = 0;
     });
-  }
-
-  @override
-  void initState() {
-    timerCountDown();
-    super.initState();
   }
 
   @override
