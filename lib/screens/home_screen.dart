@@ -7,11 +7,17 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:resipros/screens/dashboard_photos_by_cutomer.dart';
+import 'package:resipros/screens/home_screen_reviews_screen.dart';
 import 'package:resipros/screens/settings_profile_screen.dart';
 
+import 'credentials/registration/registration_screen.dart';
 import 'dashboard_photos_by_you.dart';
 import 'manage_address_screen.dart';
 import 'membership_plan_screen.dart';
+import 'notifications_profile_view_screen.dart';
+
+PersistentTabController controller = PersistentTabController(initialIndex: 1);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,9 +36,6 @@ String refferalCodeDashboard = "xx xxxx";
 List postedByCustomer = [];
 
 class _HomeScreenState extends State<HomeScreen> {
-  PersistentTabController _controller =
-      PersistentTabController(initialIndex: 1);
-
   List<Widget> _screens = [
     NotificationScreen(),
     DashboardScreen(),
@@ -44,19 +47,19 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.notifications),
         title: ("Notification"),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: Color(0xff00adb5),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
         title: ("Dashboard"),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: Color(0xff00adb5),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
         title: ("Settings"),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: Color(0xff00adb5),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];
@@ -81,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeIn,
         child: PersistentTabView(
           context,
-          controller: _controller,
+          controller: controller,
           screens: _screens,
           items: _navBarsItems(),
           confineInSafeArea: true,
@@ -156,26 +159,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
-                leading: Icon(Icons.update),
-                onTap: () {
-                  print("Latest Option Tapped");
-                },
-                title: Text("Latest"),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 35,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
                 onTap: () {
                   print("Reviews Option Tapped");
+
+                  Get.to(HomeScreenReviewsScreen());
                 },
                 title: Text("Reviews"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
                 leading: Icon(
@@ -188,10 +180,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: ListTile(
                 onTap: () {
                   print("Photos Uploaded Option Tapped");
+                  Get.to(PhotosByCustomer());
                 },
-                title: Text("Photos Uploaded"),
+                title: Text("Photos By Customer"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
                 leading: Icon(
@@ -204,6 +198,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               child: ListTile(
                 onTap: () {
                   print("Profile Views Option Tapped");
+                  Get.to(NotificationsProfileViewScreen());
                 },
                 title: Text("Profile Views"),
                 leading: Icon(
@@ -211,6 +206,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
               ),
@@ -218,9 +214,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ],
         ),
         appBar: AppBar(
-          title: Text("Notification"),
+          elevation: 0,
+          backgroundColor: Colors.white,
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: Colors.black,
+              size: 32,
+            ),
+            onPressed: () => Get.to(HomeScreen()),
+          ),
+          title: Text(
+            "Notifications",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Karla",
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
+            ),
+          ),
         ),
+        backgroundColor: Colors.white,
       ),
     );
   }
@@ -274,6 +290,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           size: 35,
         ),
         onPressed: () {
+          Get.to(PhotosByCustomer());
           print("Album Icon Pressed");
         },
       ),
@@ -515,6 +532,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       icon: Icon(
                         Icons.chevron_right,
+                        color: Colors.black,
                         size: 35,
                       ),
                     ),
@@ -561,9 +579,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: EdgeInsets.only(right: 8.0),
                     alignment: Alignment.centerRight,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(PhotosByCustomer());
+                      },
                       icon: Icon(
                         Icons.chevron_right,
+                        color: Colors.black,
                         size: 35,
                       ),
                     ),
@@ -610,9 +631,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     padding: EdgeInsets.only(right: 8.0),
                     alignment: Alignment.centerRight,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(HomeScreenReviewsScreen());
+                      },
                       icon: Icon(
                         Icons.chevron_right,
+                        color: Colors.black,
                         size: 35,
                       ),
                     ),
@@ -630,6 +654,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 leading: Icon(Icons.account_circle),
                 title: Text(
                   "Nikhil Sahu",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListTile(
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    "Using for a day. So far all Good. Back side Diamond finish great. Material also Good. Camera - Good, bright picture. Rich in color may be corrected. Display Good.",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                leading: Icon(Icons.account_circle),
+                title: Text(
+                  "Akhil Sahu",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ListTile(
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    "Using for a day. So far all Good. Back side Diamond finish great. Material also Good. Camera - Good, bright picture. Rich in color may be corrected. Display Good.",
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                leading: Icon(Icons.account_circle),
+                title: Text(
+                  "Paras Maravi",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -680,9 +732,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
           fontFamily: "Karla"),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Settings"),
+          elevation: 0,
+          backgroundColor: Colors.white,
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: Colors.black,
+              size: 32,
+            ),
+            onPressed: () => Get.to(HomeScreen()),
+          ),
+          title: Text(
+            "Settings",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Karla",
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
+            ),
+          ),
         ),
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             Padding(
@@ -704,29 +776,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: Text("${phoneNumberDashboard}"),
                 trailing: Text(
                   "Edit",
-                  style: TextStyle(color: Colors.blue),
+                  style: TextStyle(
+                    color: Color(0xff4d61a8),
+                  ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: ListTile(
-                  horizontalTitleGap: 20,
-                  leading: Icon(
-                    Icons.notifications_active,
-                    color: Colors.blue,
-                  ),
-                  title: Text("Notifications"),
-                  subtitle: Text("Turn on/off Notification"),
-                  trailing: Switch(
-                    onChanged: (bool value) {
-                      setState(() {
-                        print(value);
-                        valueNotification = value;
-                      });
-                    },
-                    value: valueNotification,
-                  )),
+                horizontalTitleGap: 20,
+                leading: Icon(
+                  Icons.gpp_good,
+                  color: Color(0xff4d61a8),
+                ),
+                onTap: () {
+                  Get.to(MembershipPlanScreen());
+                  print("Settings tab MemberShip Plan Option Tapped");
+                },
+                title: Text('Membership PLan'),
+                subtitle: Text("Select Valuable Plans"),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Colors.black,
+                  size: 35,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(4.0),
@@ -734,7 +809,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 horizontalTitleGap: 20,
                 leading: Icon(
                   Icons.home,
-                  color: Colors.blue,
+                  color: Color(0xff4d61a8),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -749,6 +824,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: Text("Manage Work Addresses"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
               ),
@@ -759,7 +835,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 horizontalTitleGap: 20,
                 leading: Icon(
                   Icons.contact_support,
-                  color: Colors.blue,
+                  color: Color(0xff4d61a8),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -774,6 +850,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: Text("Feel free to contact us"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
               ),
@@ -784,7 +861,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 horizontalTitleGap: 20,
                 leading: Icon(
                   Icons.contact_phone,
-                  color: Colors.blue,
+                  color: Color(0xff4d61a8),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -799,6 +876,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: Text("Know More About Resipros"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
               ),
@@ -809,7 +887,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 horizontalTitleGap: 20,
                 leading: Icon(
                   Icons.report,
-                  color: Colors.blue,
+                  color: Color(0xff4d61a8),
                 ),
                 onTap: () {
                   print("Settings Report  Option Tapped");
@@ -818,6 +896,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle: Text("Report any Anonymous Activity"),
                 trailing: Icon(
                   Icons.chevron_right,
+                  color: Colors.black,
                   size: 35,
                 ),
               ),
@@ -826,19 +905,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
               height: 25,
             ),
             Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.logout),
-                      Text("Logout"),
-                    ],
-                  ),
-                ),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18),
+              child: Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Color(0xFF4D61A8)),
+                    onPressed: () {
+                      Get.to(RegistrationScreen());
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.power_settings_new,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          "Logout",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    )),
               ),
             ),
           ],

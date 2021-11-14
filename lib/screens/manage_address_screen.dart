@@ -12,34 +12,72 @@ class ManageAddressScreen extends StatefulWidget {
 class _ManageAddressScreenState extends State<ManageAddressScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            Get.to(EditAddressScreen());
-          },
-          child: Icon(Icons.add),
-        ),
-      ),
-      appBar: AppBar(
-        title: Text("Manage Addresses"),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListTile(
-          onTap: () {
-            Get.to(EditAddressScreen());
-          },
-          leading: Icon(
-            Icons.home,
-            size: 35,
-            color: Colors.blue,
+    return MaterialApp(
+      theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.),
+
+          fontFamily: "Karla"),
+      home: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: Colors.black,
+              size: 32,
+            ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Text("Home"),
-          subtitle: Text("A-1,Saheb Parishar, Yadav Colony"),
-          trailing: Icon(Icons.edit),
+          title: Text(
+            "Manage Address",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Karla",
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+            backgroundColor: Color(0xff4d61a8),
+            onPressed: () {
+              Get.to(EditAddressScreen());
+            },
+            child: Icon(Icons.add),
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            onTap: () {
+              Get.to(EditAddressScreen());
+            },
+            leading: Icon(
+              Icons.home,
+              size: 35,
+              color: Color(0xff4d61a8),
+            ),
+            title: Text("Home"),
+            subtitle: Text("A-1,Saheb Parishar, Yadav Colony"),
+            trailing: Icon(
+              Icons.edit,
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );
@@ -92,7 +130,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(width: 1.5, color: Colors.blue),
+                              BorderSide(width: 1.5, color: Color(0xff4d61a8)),
                           borderRadius: BorderRadius.circular(10.0),
                         )),
                   ),
@@ -117,7 +155,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(width: 1.5, color: Colors.blue),
+                              BorderSide(width: 1.5, color: Color(0xff4d61a8)),
                           borderRadius: BorderRadius.circular(10.0),
                         )),
                   ),
@@ -142,7 +180,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(width: 1.5, color: Colors.blue),
+                              BorderSide(width: 1.5, color: Color(0xff4d61a8)),
                           borderRadius: BorderRadius.circular(10.0),
                         )),
                   ),
@@ -167,7 +205,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(width: 1.5, color: Colors.blue),
+                              BorderSide(width: 1.5, color: Color(0xff4d61a8)),
                           borderRadius: BorderRadius.circular(10.0),
                         )),
                   ),

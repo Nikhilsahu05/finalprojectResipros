@@ -1,21 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:resipros/screens/profile_screen.dart';
+import 'package:resipros/full_address_screen.dart';
 
-class OtpScreen extends StatefulWidget {
+class PinCodeScreen extends StatefulWidget {
+  const PinCodeScreen({Key? key}) : super(key: key);
+
   @override
-  _OtpScreenState createState() => _OtpScreenState();
+  _PinCodeScreenState createState() => _PinCodeScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
-  String refferalCode = " ";
+class _PinCodeScreenState extends State<PinCodeScreen> {
+  bool isPincodeFiled = false;
 
-  bool _showCircularProgression = false;
-
-  TextEditingController _otpController = TextEditingController();
-
-  TextEditingController _pincodeController = TextEditingController();
+  TextEditingController? _pincodeController = TextEditingController();
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -40,28 +40,38 @@ class _OtpScreenState extends State<OtpScreen> {
 
           fontFamily: "Karla"),
       home: Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(12.0),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.chevron_left,
+              color: Colors.black,
+              size: 32,
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text(
+            "What is your Pin Code ?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Karla",
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 15,
-              ),
-              Container(
-                padding: const EdgeInsets.only(left: 40.0, right: 40, top: 20),
-                child: const Text(
-                  "Enter the valid verification code sent to your mobile",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "Karla",
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 75,
+              SizedBox(
+                height: 200,
               ),
               Container(
                 margin: const EdgeInsets.all(20.0),
@@ -72,7 +82,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   fieldsCount: 6,
                   controller: _pincodeController,
                   onSubmit: (String pin) {
-                    print("$pin OTPSCREEN");
+                    print("$pin");
+                    print(isPincodeFiled);
                   },
                   submittedFieldDecoration: _pinPutDecoration.copyWith(
                     borderRadius: BorderRadius.circular(20.0),
@@ -102,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xFF4D61A8)),
                       onPressed: () {
-                        Get.to(ProfileScreen());
+                        Get.to(FullAddressScreen());
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,35 +134,13 @@ class _OtpScreenState extends State<OtpScreen> {
                       )),
                 ),
               ),
+              Flexible(
+                child: SizedBox(
+                  height: 50,
+                ),
+              ),
             ],
           ),
-        ),
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.chevron_left,
-              color: Colors.black,
-              size: 32,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          centerTitle: true,
-          title: const Text(
-            "One Time Password",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: "Karla",
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-              color: Colors.black,
-            ),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.white,
         ),
       ),
     );

@@ -518,9 +518,7 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                                 setState(() {
                                   myFocusNode!.requestFocus();
                                   CheckboxOther = newValue!;
-                                  _scrollController.jumpTo(
-                                      MediaQuery.of(context).size.height *
-                                          0.45);
+                                  _scrollController.jumpTo(300);
                                   print(_scrollController.offset);
                                 });
                               },

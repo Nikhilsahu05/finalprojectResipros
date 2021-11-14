@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:resipros/screens/work_profile_screen.dart';
+import 'package:resipros/pincode_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -242,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF4D61A8)),
                             onPressed: () {
-                              Get.to(WorkProfileScreen());
+                              Get.to(PinCodeScreen());
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,

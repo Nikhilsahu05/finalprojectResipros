@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-class PhotosByYou extends StatefulWidget {
-  const PhotosByYou({Key? key}) : super(key: key);
+class HomeScreenReviewsScreen extends StatefulWidget {
+  const HomeScreenReviewsScreen({Key? key}) : super(key: key);
 
   @override
-  _PhotosByYouState createState() => _PhotosByYouState();
+  _HomeScreenReviewsScreenState createState() =>
+      _HomeScreenReviewsScreenState();
 }
 
-class _PhotosByYouState extends State<PhotosByYou> {
+class _HomeScreenReviewsScreenState extends State<HomeScreenReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,7 +38,7 @@ class _PhotosByYouState extends State<PhotosByYou> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              "Photos By You",
+              "Reviews By Customer",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: "Karla",

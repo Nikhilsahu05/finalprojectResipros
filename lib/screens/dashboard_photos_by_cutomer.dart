@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PhotosByYou extends StatefulWidget {
-  const PhotosByYou({Key? key}) : super(key: key);
+class PhotosByCustomer extends StatefulWidget {
+  const PhotosByCustomer({Key? key}) : super(key: key);
 
   @override
-  _PhotosByYouState createState() => _PhotosByYouState();
+  _PhotosByCustomerState createState() => _PhotosByCustomerState();
 }
 
-class _PhotosByYouState extends State<PhotosByYou> {
+class _PhotosByCustomerState extends State<PhotosByCustomer> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,7 +37,7 @@ class _PhotosByYouState extends State<PhotosByYou> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              "Photos By You",
+              "Photos By Customer",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: "Karla",
