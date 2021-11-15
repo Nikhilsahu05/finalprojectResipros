@@ -1,21 +1,66 @@
+import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:resipros/screens/profile_screen.dart';
 
 class OtpScreen extends StatefulWidget {
+  String verificationId;
+  String phoneNumber;
+  OtpScreen(this.verificationId, this.phoneNumber);
+
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  String refferalCode = " ";
+  Future signInWithPhone(String phoneNumber) async {
+    await auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          print("Sign in With Phone => Credentials => $credential");
+          await auth.signInWithCredential(credential);
+          setState(() {
+            isLoading = false;
+          });
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          setState(() {
+            isLoading = false;
+          });
+          if (e.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+            Get.snackbar("Try Again", "Phone number is not valid.");
+          }
+          print("Sign in With Phone => VerificationFailed => $e");
+          print(
+              "Some Exceptions Occur While Sending otp ==> ${e.code} +++ ${e.message}");
 
-  bool _showCircularProgression = false;
+          Get.snackbar("Try Again", "${e.code}");
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          setState(() {
+            isLoading = false;
+          });
+          print(
+              "Sign in With Phone => codeSent => $verificationId <= Verification ID + Resend Token =>$resendToken");
+        },
+        timeout: const Duration(seconds: 30),
+        codeAutoRetrievalTimeout: (String verificationId) {
+          setState(() {
+            isLoading = false;
+          });
+          print(
+              "Sign in With Phone => codeAutoRetrievalTimeout => $verificationId <= Verification ID");
+          print(
+              "Sign in With Phone => codeAutoRetrievalTimeout => ****TIMEOUT****  ");
 
-  TextEditingController _otpController = TextEditingController();
+          Get.snackbar("Try Again", "OTP Entering Timeout");
+        });
+  }
 
-  TextEditingController _pincodeController = TextEditingController();
+  bool isLoading = false;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -23,6 +68,28 @@ class _OtpScreenState extends State<OtpScreen> {
       borderRadius: BorderRadius.circular(15.0),
     );
   }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  Future verifyOTP() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: widget.verificationId, smsCode: controller.text);
+
+      final User? user = (await auth.signInWithCredential(credential)).user;
+      setState(() {
+        isLoading = false;
+      });
+      print("verifyOTP Method Called SuccessFully ===> $user");
+    } on Exception catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Get.snackbar('Try agian', 'Some Technical Issue');
+      print("verifyOTP Method Called Some Error ===> $e");
+    }
+  }
+
+  TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +137,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 child: PinPut(
                   autofocus: true,
                   fieldsCount: 6,
-                  controller: _pincodeController,
+                  controller: controller,
                   onSubmit: (String pin) {
                     print("$pin OTPSCREEN");
                   },
@@ -85,6 +152,36 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                 ),
+              ),
+              ArgonTimerButton(
+                initialTimer: 30, // Optional
+                height: 50,
+                width: MediaQuery.of(context).size.width * 0.45,
+                minWidth: MediaQuery.of(context).size.width * 0.30,
+                color: Color(0xFF7866FE),
+                borderRadius: 5.0,
+                child: Text(
+                  "Resend OTP",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700),
+                ),
+                loader: (timeLeft) {
+                  return Text(
+                    "Wait | $timeLeft",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700),
+                  );
+                },
+                onTap: (startTimer, btnState) {
+                  signInWithPhone(("+91${widget.phoneNumber}"));
+                  if (btnState == ButtonState.Idle) {
+                    startTimer(30);
+                  }
+                },
               ),
               Flexible(
                 flex: 8,
@@ -102,7 +199,10 @@ class _OtpScreenState extends State<OtpScreen> {
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xFF4D61A8)),
                       onPressed: () {
-                        Get.to(ProfileScreen());
+                        setState(() {
+                          isLoading = true;
+                        });
+                        verifyOTP();
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

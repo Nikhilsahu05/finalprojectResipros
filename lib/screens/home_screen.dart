@@ -7,12 +7,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:resipros/screens/dashboard_photos_by_cutomer.dart';
+import 'package:resipros/screens/dashboard/dashboard_photos_by_cutomer.dart';
 import 'package:resipros/screens/home_screen_reviews_screen.dart';
 import 'package:resipros/screens/settings_profile_screen.dart';
 
-import 'credentials/registration/registration_screen.dart';
-import 'dashboard_photos_by_you.dart';
+import 'credentials/login/registration_screen.dart';
+import 'dashboard/dashboard_photos_by_you.dart';
 import 'manage_address_screen.dart';
 import 'membership_plan_screen.dart';
 import 'notifications_profile_view_screen.dart';
