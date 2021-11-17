@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -10,22 +12,37 @@ class WorkProfileScreen extends StatefulWidget {
 }
 
 class _WorkProfileScreenState extends State<WorkProfileScreen> {
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  Future createWorkInformation() async {
+    await firebaseFirestore
+        .collection("${firebaseAuth.currentUser!.uid}")
+        .doc("Work_Information")
+        .set({
+      "Experience": _selectedExperience,
+      "PerDayBasisWork": checkboxDay,
+      "PerDayBasisWorkAtleast": _dayPriceRangeFirst.text,
+      "PerDayBasisWorkAtmost": _dayPriceRangeSecond.text,
+      "PerInchBasisWork": checkboxInch,
+      "PerInchBasisWorkAtleast": _InchPriceRangeFirst.text,
+      "PerInchBasisWorkAtmost": _InchPriceRangeSecond.text,
+      "ContractBasisWork": checkboxContract
+    }).then((value) {
+      print("WorkProfileScreen DATABASE SAVED");
+    }).catchError((onError) {
+      print("WorkProfileScreen DATABASE Error ===$onError");
+    });
+  }
+
   bool _showIndicator = false;
 
   List _experience = ['0 - 5 Years', '5-10 Years', '10-15 Years', '15+ Years'];
-  List _type = [
-    'Fresher',
-    'Intermediate',
-    'Expert',
-  ];
 
   var _selectedExperience;
 
-  TextEditingController _expectedWagesController = TextEditingController();
-
-  bool checkboxDay = true;
-  bool checkboxInch = true;
-  bool checkboxContract = true;
+  bool checkboxDay = false;
+  bool checkboxInch = false;
+  bool checkboxContract = false;
 
   TextEditingController _dayPriceRangeFirst = TextEditingController();
   TextEditingController _dayPriceRangeSecond = TextEditingController();
@@ -50,6 +67,7 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
 
           fontFamily: "Karla"),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -166,72 +184,53 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 10,
-                      ),
                       Checkbox(
-                        value: checkboxDay == true ? true : false,
-                        onChanged: (onChanged) {
-                          setState(() {
-                            print(onChanged);
-                            onChanged = checkboxDay;
-                          });
-                        },
                         activeColor: Color(0xff00adb5),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
+                        value: checkboxDay,
+                        onChanged: (newValue) {
+                          setState(() {
+                            checkboxDay = newValue!;
+                          });
+                        },
                       ),
-                      Text(
-                        "Per Day Basis",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, fontFamily: "Karla"),
-                      ),
+                      Text("Per Day Basis ",
+                          style: TextStyle(fontSize: 14, color: Colors.black)),
                     ],
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 10,
-                      ),
                       Checkbox(
+                        activeColor: Color(0xff00adb5),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         value: checkboxInch,
-                        onChanged: (onChanged) {
+                        onChanged: (newValue) {
                           setState(() {
-                            onChanged = checkboxInch;
+                            checkboxInch = newValue!;
                           });
                         },
-                        activeColor: Color(0xff00adb5),
                       ),
-                      Text(
-                        "Per Inch Basis",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, fontFamily: "Karla"),
-                      ),
+                      Text("Per Inch Basis",
+                          style: TextStyle(fontSize: 14, color: Colors.black)),
                     ],
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 10,
-                      ),
                       Checkbox(
+                        activeColor: Color(0xff00adb5),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5)),
                         value: checkboxContract,
-                        onChanged: (onChanged) {
+                        onChanged: (newValue) {
                           setState(() {
-                            onChanged = checkboxContract;
+                            checkboxContract = newValue!;
                           });
                         },
-                        activeColor: Color(0xff00adb5),
                       ),
-                      Text(
-                        "Contract Basis",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14, fontFamily: "Karla"),
-                      ),
+                      Text("Contract Basis",
+                          style: TextStyle(fontSize: 14, color: Colors.black)),
                     ],
                   ),
                   SizedBox(
@@ -256,9 +255,9 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                                     ),
                                     height: 30,
                                     child: TextField(
-                                      controller: _InchPriceRangeFirst,
+                                      controller: _dayPriceRangeFirst,
                                       onSubmitted: (value) {
-                                        _InchPriceRangeFirst.text = value;
+                                        _dayPriceRangeFirst.text = value;
                                       },
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
@@ -299,9 +298,9 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                                     ),
                                     height: 30,
                                     child: TextField(
-                                      controller: _InchPriceRangeFirst,
+                                      controller: _dayPriceRangeSecond,
                                       onSubmitted: (value) {
-                                        _InchPriceRangeFirst.text = value;
+                                        _dayPriceRangeSecond.text = value;
                                       },
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
@@ -404,9 +403,9 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                                     ),
                                     height: 30,
                                     child: TextField(
-                                      controller: _InchPriceRangeFirst,
+                                      controller: _InchPriceRangeSecond,
                                       onSubmitted: (value) {
-                                        _InchPriceRangeFirst.text = value;
+                                        _InchPriceRangeSecond.text = value;
                                       },
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
@@ -461,7 +460,42 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF4D61A8)),
-                            onPressed: () {
+                            onPressed: () async {
+                              if (_selectedExperience == null) {
+                                Get.snackbar("Please fill Experience",
+                                    "Experience is Mandatory");
+                                return;
+                              }
+
+                              if (checkboxDay == false &&
+                                  checkboxInch == false &&
+                                  checkboxContract == false) {
+                                Get.snackbar("Please fill Basis of Work",
+                                    "Basis of Work is Mandatory");
+                                return;
+                              }
+
+                              if (checkboxDay == true) {
+                                if (_dayPriceRangeFirst.text.isNotEmpty &&
+                                    _dayPriceRangeSecond.text.isNotEmpty) {
+                                  print("Both are filled");
+                                } else {
+                                  Get.snackbar(
+                                      "Fill", "Any one or both field is empty");
+                                  return;
+                                }
+                              }
+                              if (checkboxInch == true) {
+                                if (_InchPriceRangeFirst.text.isNotEmpty &&
+                                    _InchPriceRangeSecond.text.isNotEmpty) {
+                                  print("Both are filled");
+                                } else {
+                                  Get.snackbar(
+                                      "Fill", "Any one or both field is empty");
+                                  return;
+                                }
+                              }
+                              await createWorkInformation();
                               Get.to(InterestFieldScreen());
                             },
                             child: Row(

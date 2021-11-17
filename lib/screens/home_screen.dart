@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
@@ -17,6 +19,14 @@ import 'manage_address_screen.dart';
 import 'membership_plan_screen.dart';
 import 'notifications_profile_view_screen.dart';
 
+String profileImageUrl = "";
+String gridImageUrl =
+    "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg";
+String fullNameDashboard = "";
+String phoneNumberDashboard = "";
+
+List postedByCustomer = [];
+
 PersistentTabController controller = PersistentTabController(initialIndex: 1);
 
 class HomeScreen extends StatefulWidget {
@@ -25,15 +35,6 @@ class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
-
-String profileImageUrl = "https://via.placeholder.com/150";
-String gridImageUrl =
-    "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg";
-String fullNameDashboard = "Full Name";
-String phoneNumberDashboard = "xxx xxx xxxx";
-String refferalCodeDashboard = "xx xxxx";
-
-List postedByCustomer = [];
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _screens = [
@@ -84,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeIn,
         child: PersistentTabView(
           context,
+
           controller: controller,
           screens: _screens,
           items: _navBarsItems(),
@@ -345,6 +347,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           fontFamily: "Karla"),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
@@ -416,9 +419,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     children: [
                                       Container(
                                         padding: EdgeInsets.only(
-                                            left: 22.0, top: 45.0),
+                                            left: 42.0, top: 45.0),
                                         child: Text(
-                                          "PhoolChand Swami",
+                                          "$fullNameDashboard",
                                           style: TextStyle(
                                               letterSpacing: 2.0,
                                               fontSize: 16,
@@ -449,7 +452,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     padding:
                                         EdgeInsets.only(left: 35.0, top: 18.0),
                                     child: Text(
-                                      "+91 8349337625",
+                                      "$phoneNumberDashboard",
                                       style: TextStyle(
                                           letterSpacing: 2.0,
                                           fontSize: 16,
@@ -942,16 +945,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({Key? key}) : super(key: key);
-//Call All The Data Here
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  Future readDashboardData() async {
+    firebaseFirestore
+        .collection(auth.currentUser!.uid)
+        .doc("Profile_Information")
+        .get()
+        .then((value) {
+      print(value.data());
+      setState(() {
+        profileImageUrl = value.data()!["ProfilePictureURL"];
+        fullNameDashboard = value.data()!["Full_Name"];
+        phoneNumberDashboard = value.data()!["Mobile_Number"];
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
   @override
   void initState() {
+    readDashboardData();
     print("Loading Screen Started");
+    print(profileImageUrl);
     timerCountDown();
     super.initState();
   }

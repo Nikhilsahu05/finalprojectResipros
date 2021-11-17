@@ -1,4 +1,6 @@
 import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
@@ -15,12 +17,40 @@ class InterestFieldScreen extends StatefulWidget {
 }
 
 class _InterestFieldScreenState extends State<InterestFieldScreen> {
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  Future createSuperiorityInformation() async {
+    await firebaseFirestore
+        .collection("${firebaseAuth.currentUser!.uid}")
+        .doc("Superiority")
+        .set({
+      "Construction&Repairing": CheckboxConstruction,
+      "Building": CheckboxBuilding,
+      "BuildingResidential": CheckboxResidential,
+      "BuildingCommercial": CheckboxCommercial,
+      "Repairing": CheckboxConstructionRepairing,
+      "InteriorDesigner": CheckboxInterior,
+      "Painter": CheckboxPainter,
+      "Plumber": CheckboxPlumber,
+      "PlumberFullFitting": CheckboxPlumberFitting,
+      "PlumberFullRepairing": CheckboxPlumberRepairing,
+      "Electrician": CheckboxElectrician,
+      "ElectricianFullFitting": CheckboxElectricianFitting,
+      "ElectricianRepairing": CheckboxElectricianRepairing,
+      "OtherTypesOfWork": selectedWorkType,
+    }).then((value) {
+      print("INTEREST FIELD DATABASE SAVED");
+    }).catchError((onError) {
+      print("INTEREST FIELD DATABASE Error ===$onError");
+    });
+  }
+
   GlobalKey<AutoCompleteTextFieldState<String>> key = GlobalKey();
   bool isLoading = false;
-  var CheckboxConstruction = false;
 
   var CheckboxOther = false;
 
+  var CheckboxConstruction = false;
   var CheckboxInterior = false;
 
   var CheckboxPlumber = false;
@@ -28,8 +58,6 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
   var CheckboxElectrician = false;
 
   var CheckboxPainter = false;
-
-  var CheckboxCarpainter = false;
 
   var CheckboxBuilding = false;
 
@@ -69,8 +97,6 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
 
   bool isloadingDialog = false;
 
-  ScrollController _controller = ScrollController();
-  ScrollController _controllerScroll = ScrollController();
   FocusNode? myFocusNode;
 
   @override
@@ -644,7 +670,66 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: Color(0xFF4D61A8)),
-                                onPressed: () {
+                                onPressed: () async {
+                                  if (CheckboxOther ||
+                                      CheckboxConstruction ||
+                                      CheckboxInterior ||
+                                      CheckboxPlumber ||
+                                      CheckboxElectrician ||
+                                      CheckboxPainter ||
+                                      CheckboxBuilding ||
+                                      CheckboxResidential ||
+                                      CheckboxCommercial ||
+                                      CheckboxConstructionRepairing ||
+                                      CheckboxPlumberFitting ||
+                                      CheckboxPlumberRepairing ||
+                                      CheckboxElectricianRepairing ||
+                                      CheckboxElectricianFitting == true) {
+                                    if (CheckboxConstruction == true) {
+                                      if (CheckboxBuilding ||
+                                          CheckboxConstructionRepairing ==
+                                              true) {
+                                      } else {
+                                        Get.snackbar("Please Select",
+                                            "Atlease One Field = Building or Repairing");
+                                        return;
+                                      }
+                                      if (CheckboxBuilding == true) {
+                                        if (CheckboxResidential ||
+                                            CheckboxCommercial == true) {
+                                        } else {
+                                          Get.snackbar("Please Select",
+                                              "Atlease One Field = Residential  or Commercial");
+                                          return;
+                                        }
+                                      }
+                                    }
+                                    if (CheckboxPlumber == true) {
+                                      if (CheckboxPlumberFitting ||
+                                          CheckboxPlumberRepairing == true) {
+                                      } else {
+                                        Get.snackbar("Please Select",
+                                            "Atlease One Field = Full Fitting or Repairing");
+                                        return;
+                                      }
+                                    }
+                                    if (CheckboxElectrician == true) {
+                                      if (CheckboxElectricianFitting ||
+                                          CheckboxElectricianRepairing ==
+                                              true) {
+                                      } else {
+                                        Get.snackbar("Please Select",
+                                            "Atlease One Field = Full Fitting or Repairing");
+                                        return;
+                                      }
+                                    }
+                                  } else {
+                                    print("No field is set to tru");
+                                    Get.snackbar("Select Atleast one field",
+                                        "No Field is selected");
+                                    return;
+                                  }
+                                  await createSuperiorityInformation();
                                   Get.to(LoadingScreen());
                                 },
                                 child: Row(

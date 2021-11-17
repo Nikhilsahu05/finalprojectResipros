@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:resipros/screens/credentials/login/registration_screen.dart';
+import 'package:resipros/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +37,33 @@ class MyAppStateful extends StatefulWidget {
 }
 
 class _MyAppStatefulState extends State<MyAppStateful> {
+  late StreamSubscription<User?> user;
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    final user = FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        setState(() {
+          isLoggedIn = false;
+        });
+      } else {
+        print('User is signed in!');
+        setState(() {
+          isLoggedIn = true;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    user.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,7 +81,7 @@ class _MyAppStatefulState extends State<MyAppStateful> {
           fontFamily: "Karla"),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: RegistrationScreen(),
+        body: isLoggedIn ? LoadingScreen() : RegistrationScreen(),
       ),
     );
   }

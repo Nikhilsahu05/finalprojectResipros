@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:resipros/database/database_services.dart';
+import 'package:resipros/screens/profile_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   String verificationId;
@@ -24,6 +26,7 @@ class _OtpScreenState extends State<OtpScreen> {
           setState(() {
             isLoading = false;
           });
+          Get.to(ProfileScreen());
         },
         verificationFailed: (FirebaseAuthException e) {
           setState(() {
@@ -41,6 +44,7 @@ class _OtpScreenState extends State<OtpScreen> {
         },
         codeSent: (String verificationId, int? resendToken) {
           setState(() {
+            widget.verificationId = verificationId;
             isLoading = false;
           });
           print(
@@ -55,12 +59,12 @@ class _OtpScreenState extends State<OtpScreen> {
               "Sign in With Phone => codeAutoRetrievalTimeout => $verificationId <= Verification ID");
           print(
               "Sign in With Phone => codeAutoRetrievalTimeout => ****TIMEOUT****  ");
-
-          Get.snackbar("Try Again", "OTP Entering Timeout");
         });
   }
 
   bool isLoading = false;
+
+  DatabaseServices databaseServices = DatabaseServices();
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
@@ -70,6 +74,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   FirebaseAuth auth = FirebaseAuth.instance;
+
   Future verifyOTP() async {
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
@@ -80,6 +85,7 @@ class _OtpScreenState extends State<OtpScreen> {
         isLoading = false;
       });
       print("verifyOTP Method Called SuccessFully ===> $user");
+      Get.to(ProfileScreen());
     } on Exception catch (e) {
       setState(() {
         isLoading = false;
@@ -177,8 +183,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   );
                 },
                 onTap: (startTimer, btnState) {
-                  signInWithPhone(("+91${widget.phoneNumber}"));
                   if (btnState == ButtonState.Idle) {
+                    signInWithPhone(("+91${widget.phoneNumber}"));
                     startTimer(30);
                   }
                 },

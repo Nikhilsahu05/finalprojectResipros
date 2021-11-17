@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:resipros/database/database_services.dart';
 import 'package:resipros/screens/credentials/login/otp_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  DatabaseServices databaseServices = DatabaseServices();
+
   bool isLoading = false;
 
   TextEditingController _phoneNumberController = TextEditingController();
@@ -51,6 +54,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           print(
               "Sign in With Phone => codeSent => $verificationId <= Verification ID + Resend Token =>$resendToken");
 
+          databaseServices.sendWhatsAppNotification(
+              whatsappNotifications, _phoneNumberController.text);
           Get.to(OtpScreen(verificationId, _phoneNumberController.text));
         },
         timeout: const Duration(seconds: 30),
@@ -66,6 +71,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Get.snackbar("Try Again", "OTP Entering Timeout");
         });
   }
+
+  bool whatsappNotifications = true;
 
   @override
   Widget build(BuildContext context) {
@@ -189,21 +196,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 10,
-                        ),
                         Checkbox(
+                          activeColor: Color(0xff00adb5),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
-                          value: true,
-                          onChanged: (onChanged) {},
-                          activeColor: Color(0xff00adb5),
+                          value: whatsappNotifications,
+                          onChanged: (newValue) {
+                            setState(() {
+                              whatsappNotifications = newValue!;
+                            });
+                          },
                         ),
                         Text(
-                          "I agree to receive offers and updates via Whatsapp",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, fontFamily: "Karla"),
-                        ),
+                            "I agree to receive offers and updates via Whatsapp",
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.black)),
                       ],
                     ),
                     Padding(

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:resipros/full_address_screen.dart';
 
@@ -13,15 +16,21 @@ class PinCodeScreen extends StatefulWidget {
 }
 
 class _PinCodeScreenState extends State<PinCodeScreen> {
-  bool isPincodeFiled = false;
-
-  TextEditingController? _pincodeController = TextEditingController();
+  bool isLoading = false;
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
       border: Border.all(color: Color(0xff00adb5)),
       borderRadius: BorderRadius.circular(15.0),
     );
+  }
+
+  String pincode = "";
+  TextEditingController pincodeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -40,6 +49,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
 
           fontFamily: "Karla"),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -80,11 +90,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                 child: PinPut(
                   autofocus: true,
                   fieldsCount: 6,
-                  controller: _pincodeController,
-                  onSubmit: (String pin) {
-                    print("$pin");
-                    print(isPincodeFiled);
-                  },
+                  controller: pincodeController,
                   submittedFieldDecoration: _pinPutDecoration.copyWith(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -97,12 +103,20 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                   ),
                 ),
               ),
-              Flexible(
-                flex: 8,
-                child: Container(
-                  height: 300,
-                ),
-              ),
+              isLoading == true
+                  ? Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SpinKitFadingCube(
+                        size: 45,
+                        color: Colors.green,
+                      ),
+                    )
+                  : Flexible(
+                      flex: 8,
+                      child: Container(
+                        height: 300,
+                      ),
+                    ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18),
@@ -112,8 +126,37 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                   child: ElevatedButton(
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xFF4D61A8)),
-                      onPressed: () {
-                        Get.to(FullAddressScreen());
+                      onPressed: () async {
+                        setState(() {
+                          pincode = pincodeController.text;
+                          isLoading = true;
+                        });
+                        if (pincodeController.text.isEmpty ||
+                            pincodeController.text.length != 6) {
+                          Get.snackbar("Try Again",
+                              ("Pin Code is not 6 digit or is empty"));
+                        } else {
+                          var response = await http.get(Uri.parse(
+                              "https://api.postalpincode.in/pincode/$pincode"));
+                          if (response.statusCode == 200) {
+                            if (jsonDecode(response.body)[0]["Status"] !=
+                                "Success") {
+                              Get.snackbar("Try again",
+                                  "Pincode does not match with our database");
+                            } else {
+                              print("Pincode is correct");
+                              Get.to(FullAddressScreen(pincode));
+                            }
+                          } else {
+                            Get.snackbar("Some Technical Error",
+                                "Try again after some time");
+                          }
+                        }
+
+                        print(pincode);
+                        setState(() {
+                          isLoading = false;
+                        });
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

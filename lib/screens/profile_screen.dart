@@ -1,10 +1,15 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
-import 'package:resipros/pincode_screen.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../pincode_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -12,25 +17,76 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String district = " District";
-  String state = " State ";
-  List localities = [];
+  String profilePictureURL = "";
 
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  String phoneNumber = "";
-  bool isUploading = false;
-  File? image;
-  var profileImage = "";
+  final _picker = ImagePicker();
+
+  XFile? image;
+  final storage = FirebaseStorage.instance;
+  bool isImageUploading = false;
+  uploadImage() async {
+    setState(() {
+      isImageUploading = true;
+    });
+    image =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    var file = File(image!.path);
+
+    if (image != null) {
+      var snapshot = await storage
+          .ref("Profile_Picture")
+          .child(firebaseAuth.currentUser!.uid)
+          .putFile(file)
+          .whenComplete(() {
+        print("Successfully uploaded image to firebaseStorage");
+      }).catchError((onError) {
+        print("Image Upload Error ===>$onError");
+      });
+      var downloadURL = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        profilePictureURL = downloadURL;
+        isImageUploading = false;
+      });
+    } else {
+      Get.snackbar("Error", "Try Again and upload image");
+    }
+  }
 
   TextEditingController _fullNameTextController = TextEditingController();
-  TextEditingController _fullAddressController = TextEditingController();
-  TextEditingController _pinCodeTextController = TextEditingController();
-
-  var numberOfPostalCodes;
+  TextEditingController _emailAddrTextController = TextEditingController();
+  TextEditingController _genderTextController = TextEditingController();
+  String? mobileNumber = "";
+  bool isUploading = false;
   bool isLoading = false;
 
-  String? _selected;
   bool isPincodeSubmitted = false;
+
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  Future createProfileInformation() async {
+    await firebaseFirestore
+        .collection("${firebaseAuth.currentUser!.uid}")
+        .doc("Profile_Information")
+        .set({
+      "Full_Name": _fullNameTextController.text,
+      "Mobile_Number": mobileNumber,
+      "Email_Address": _emailAddrTextController.text,
+      "Gender": _genderTextController.text,
+      "ProfilePictureURL": profilePictureURL,
+    }).then((value) {
+      print("ProfileScreen DATABASE SAVED");
+    }).catchError((onError) {
+      print("ProfileScreen DATABASE Error ===$onError");
+    });
+  }
+
+  @override
+  void initState() {
+    mobileNumber = firebaseAuth.currentUser!.phoneNumber;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,6 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           fontFamily: "Karla"),
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: isLoading
             ? Padding(
@@ -58,7 +115,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 )),
               )
             : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 30,
@@ -77,33 +133,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Center(
                       child: GestureDetector(
-                        onTap: () {},
-                        child: isUploading
+                        onTap: () {
+                          uploadImage();
+                        },
+                        child: isImageUploading == true
                             ? CircularProgressIndicator()
                             : CircleAvatar(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Icon(
-                                    Icons.person_add_alt_1,
-                                    color: Colors.white,
-                                    size: 70,
-                                  ),
-                                ),
+                                backgroundImage: profilePictureURL.isEmpty
+                                    ? null
+                                    : NetworkImage(profilePictureURL),
+                                child: profilePictureURL.isEmpty
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Icon(
+                                          Icons.person_add_alt_1,
+                                          color: Colors.white,
+                                          size: 55,
+                                        ),
+                                      )
+                                    : null,
                                 backgroundColor: Color(0xff4d61a8),
                                 maxRadius: 60,
                               ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -116,9 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 45,
                         child: TextField(
                           controller: _fullNameTextController,
-                          onSubmitted: (value) {
-                            _fullNameTextController.text = value;
-                          },
+                          onSubmitted: (value) {},
                           decoration: InputDecoration(
                               fillColor: Colors.red,
                               hintMaxLines: 3,
@@ -146,7 +202,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Color(0xFFEBEBEB),
                             border: Border.all(color: Colors.white)),
                         height: 45,
-                        child: Center(child: Text("+91 7879232321")),
+                        child: Container(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text("$mobileNumber"),
+                            )),
                       ),
                     ),
                   ),
@@ -160,24 +222,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: Colors.white)),
                         height: 45,
                         child: TextField(
-                          controller: _fullNameTextController,
-                          onSubmitted: (value) {
-                            _fullNameTextController.text = value;
-                          },
+                          controller: _emailAddrTextController,
+                          onSubmitted: (value) {},
                           decoration: InputDecoration(
                               fillColor: Colors.red,
                               hintMaxLines: 3,
                               labelText: 'Email Address',
-                              suffix: Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Text(
-                                  "(Optional)",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
                               labelStyle:
                                   TextStyle(fontSize: 13, color: Colors.black),
                               enabledBorder: OutlineInputBorder(
@@ -202,10 +252,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             border: Border.all(color: Colors.white)),
                         height: 45,
                         child: TextField(
-                          controller: _fullNameTextController,
-                          onSubmitted: (value) {
-                            _fullNameTextController.text = value;
-                          },
+                          controller: _genderTextController,
+                          onSubmitted: (value) {},
                           decoration: InputDecoration(
                               fillColor: Colors.red,
                               hintMaxLines: 3,
@@ -241,7 +289,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF4D61A8)),
-                            onPressed: () {
+                            onPressed: () async {
+                              if (profilePictureURL.isEmpty) {
+                                Get.snackbar("Upload Profile", "");
+                                return;
+                              }
+                              if (_fullNameTextController.text.isEmpty) {
+                                Get.snackbar("Full name not filled",
+                                    "Full Name field is mandatory");
+                                return;
+                              }
+
+                              if (_genderTextController.text.isEmpty) {
+                                Get.snackbar("Gender not filled",
+                                    "Gender field is mandatory");
+                                return;
+                              }
+
+                              await createProfileInformation();
                               Get.to(PinCodeScreen());
                             },
                             child: Row(
