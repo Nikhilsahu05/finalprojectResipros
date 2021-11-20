@@ -66,8 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Future createProfileInformation() async {
     await firebaseFirestore
-        .collection("${firebaseAuth.currentUser!.uid}")
-        .doc("Profile_Information")
+        .collection("Profile_Information")
+        .doc("${firebaseAuth.currentUser!.uid}")
         .set({
       "Full_Name": _fullNameTextController.text,
       "Mobile_Number": mobileNumber,

@@ -1,4 +1,3 @@
-import 'package:argon_buttons_flutter/argon_buttons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -75,26 +74,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future verifyOTP() async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: widget.verificationId, smsCode: controller.text);
-
-      final User? user = (await auth.signInWithCredential(credential)).user;
-      setState(() {
-        isLoading = false;
-      });
-      print("verifyOTP Method Called SuccessFully ===> $user");
-      Get.to(ProfileScreen());
-    } on Exception catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      Get.snackbar('Try agian', 'Some Technical Issue');
-      print("verifyOTP Method Called Some Error ===> $e");
-    }
-  }
-
   TextEditingController controller = TextEditingController();
 
   @override
@@ -159,36 +138,6 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                 ),
               ),
-              ArgonTimerButton(
-                initialTimer: 30, // Optional
-                height: 50,
-                width: MediaQuery.of(context).size.width * 0.45,
-                minWidth: MediaQuery.of(context).size.width * 0.30,
-                color: Color(0xFF7866FE),
-                borderRadius: 5.0,
-                child: Text(
-                  "Resend OTP",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700),
-                ),
-                loader: (timeLeft) {
-                  return Text(
-                    "Wait | $timeLeft",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700),
-                  );
-                },
-                onTap: (startTimer, btnState) {
-                  if (btnState == ButtonState.Idle) {
-                    signInWithPhone(("+91${widget.phoneNumber}"));
-                    startTimer(30);
-                  }
-                },
-              ),
               Flexible(
                 flex: 8,
                 child: Container(
@@ -208,7 +157,6 @@ class _OtpScreenState extends State<OtpScreen> {
                         setState(() {
                           isLoading = true;
                         });
-                        verifyOTP();
                       },
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

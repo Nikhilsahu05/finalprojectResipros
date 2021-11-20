@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,11 +20,12 @@ import 'manage_address_screen.dart';
 import 'membership_plan_screen.dart';
 import 'notifications_profile_view_screen.dart';
 
-String profileImageUrl = "";
+String profileImageUrl = "https://via.placeholder.com/150";
+
 String gridImageUrl =
     "https://5.imimg.com/data5/AT/BW/JN/ANDROID-36401672/product-jpeg-500x500.jpg";
-String fullNameDashboard = "";
-String phoneNumberDashboard = "";
+String fullNameDashboard = "Full Name";
+String phoneNumberDashboard = "+91 123 123 2545";
 
 List postedByCustomer = [];
 
@@ -245,8 +247,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
 }
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
-
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
@@ -400,13 +400,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20, left: 25),
-                              child: Flexible(
-                                flex: 3,
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Flexible(
+                              flex: 3,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 20.0, left: 8),
                                 child: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(profileImageUrl),
+                                  child: ClipOval(
+                                    child: CachedNetworkImage(
+                                      imageUrl: profileImageUrl,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                  ),
                                   maxRadius: 45,
                                 ),
                               ),
@@ -765,7 +781,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: ListTile(
                 horizontalTitleGap: 20,
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(profileImageUrl),
+                  child: CircleAvatar(
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: profileImageUrl,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                    ),
+                    maxRadius: 45,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -953,26 +984,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  Future readDashboardData() async {
+  Future readInformation() async {
     firebaseFirestore
-        .collection(auth.currentUser!.uid)
-        .doc("Profile_Information")
-        .get()
-        .then((value) {
-      print(value.data());
+        .collection("Profile_Information")
+        .doc(auth.currentUser?.uid)
+        .snapshots()
+        .listen((event) {
+      print(event.id);
+      print(event["ProfilePictureURL"]);
+      print(event["Mobile_Number"]);
+      print(event["Full_Name"]);
+
       setState(() {
-        profileImageUrl = value.data()!["ProfilePictureURL"];
-        fullNameDashboard = value.data()!["Full_Name"];
-        phoneNumberDashboard = value.data()!["Mobile_Number"];
+        profileImageUrl = event["ProfilePictureURL"];
+        fullNameDashboard = event["Full_Name"];
+        phoneNumberDashboard = event["Mobile_Number"];
       });
-    }).catchError((onError) {
-      print(onError);
     });
   }
 
   @override
   void initState() {
-    readDashboardData();
+    readInformation();
     print("Loading Screen Started");
     print(profileImageUrl);
     timerCountDown();

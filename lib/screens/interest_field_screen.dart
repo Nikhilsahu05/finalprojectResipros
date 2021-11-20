@@ -21,8 +21,8 @@ class _InterestFieldScreenState extends State<InterestFieldScreen> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Future createSuperiorityInformation() async {
     await firebaseFirestore
-        .collection("${firebaseAuth.currentUser!.uid}")
-        .doc("Superiority")
+        .collection("Superiority")
+        .doc("${firebaseAuth.currentUser!.uid}")
         .set({
       "Construction&Repairing": CheckboxConstruction,
       "Building": CheckboxBuilding,

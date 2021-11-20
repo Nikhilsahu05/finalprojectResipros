@@ -16,8 +16,8 @@ class _WorkProfileScreenState extends State<WorkProfileScreen> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Future createWorkInformation() async {
     await firebaseFirestore
-        .collection("${firebaseAuth.currentUser!.uid}")
-        .doc("Work_Information")
+        .collection("Work_Information")
+        .doc("${firebaseAuth.currentUser!.uid}")
         .set({
       "Experience": _selectedExperience,
       "PerDayBasisWork": checkboxDay,

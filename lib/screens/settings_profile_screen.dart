@@ -15,18 +15,30 @@ class SettingsProfileScreen extends StatefulWidget {
 }
 
 class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
-  String profilePictureURL = "";
+  Future updateUserInformation() async {
+    firebaseFirestore
+        .collection("Profile_Information")
+        .doc(firebaseAuth.currentUser!.uid)
+        .update({
+      "Email_Address": _emailAddrTextController.text,
+      "Full_Name": _fullNameTextController.text,
+      "Gender": _genderTextController.text,
+      "ProfilePictureURL": profilePictureURL
+    }).then((value) {
+      print("Success");
+    }).catchError((onError) {
+      print(onError);
+    });
+  }
+
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String profilePictureURL = "";
+
   final _picker = ImagePicker();
 
   XFile? image;
   final storage = FirebaseStorage.instance;
   bool isImageUploading = false;
-
-  TextEditingController _genderTextController = TextEditingController();
-
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _emailAddressController = TextEditingController();
   uploadImage() async {
     setState(() {
       isImageUploading = true;
@@ -56,23 +68,14 @@ class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
     }
   }
 
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  bool isUploading = false;
+  bool isLoading = false;
 
-  Future updateProfileInformation() async {
-    await firebaseFirestore
-        .collection(firebaseAuth.currentUser!.uid)
-        .doc("Profile_Information")
-        .update({
-      "Email_Address": _emailAddressController.text,
-      "Full_Name": _fullNameController.text,
-      "Gender": _genderTextController.text,
-      "ProfilePictureURL": profilePictureURL,
-    }).then((value) {
-      print("Settings profile screen database updated");
-    }).catchError((onError) {
-      print("Some Error Cought On Updating Database $onError");
-    });
-  }
+  TextEditingController _fullNameTextController = TextEditingController();
+  TextEditingController _emailAddrTextController = TextEditingController();
+  TextEditingController _genderTextController = TextEditingController();
+
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -131,21 +134,26 @@ class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
                         onTap: () {
                           uploadImage();
                         },
-                        child: CircleAvatar(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: profilePictureURL == null
-                                ? Icon(
-                                    Icons.person_add_alt_1,
-                                    color: Colors.white,
-                                    size: 55,
-                                  )
-                                : null,
-                          ),
-                          backgroundColor: Color(0xff4d61a8),
-                          backgroundImage: NetworkImage(profilePictureURL),
-                          maxRadius: 60,
-                        ),
+                        child: isImageUploading == true
+                            ? CircularProgressIndicator()
+                            : CircleAvatar(
+                                backgroundImage: profilePictureURL.isEmpty
+                                    ? null
+                                    : NetworkImage(profilePictureURL),
+                                child: profilePictureURL.isEmpty
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Icon(
+                                          Icons.person_add_alt_1,
+                                          color: Colors.white,
+                                          size: 55,
+                                        ),
+                                      )
+                                    : null,
+                                backgroundColor: Color(0xff4d61a8),
+                                maxRadius: 60,
+                              ),
                       ),
                     ),
                   ),
@@ -162,7 +170,7 @@ class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
                             border: Border.all(color: Colors.white)),
                         height: 45,
                         child: TextField(
-                          controller: _fullNameController,
+                          controller: _fullNameTextController,
                           onSubmitted: (value) {},
                           decoration: InputDecoration(
                               fillColor: Colors.red,
@@ -211,7 +219,7 @@ class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
                             border: Border.all(color: Colors.white)),
                         height: 45,
                         child: TextField(
-                          controller: _emailAddressController,
+                          controller: _emailAddrTextController,
                           onSubmitted: (value) {},
                           decoration: InputDecoration(
                               fillColor: Colors.red,
@@ -285,8 +293,23 @@ class _SettingsProfileScreenState extends State<SettingsProfileScreen> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xFF4D61A8)),
-                            onPressed: () {
-                              updateProfileInformation();
+                            onPressed: () async {
+                              if (profilePictureURL.isEmpty) {
+                                Get.snackbar("Upload Profile", "");
+                                return;
+                              }
+                              if (_fullNameTextController.text.isEmpty) {
+                                Get.snackbar("Full name not filled",
+                                    "Full Name field is mandatory");
+                                return;
+                              }
+
+                              if (_genderTextController.text.isEmpty) {
+                                Get.snackbar("Gender not filled",
+                                    "Gender field is mandatory");
+                                return;
+                              }
+                              await updateUserInformation();
                               Navigator.pop(context);
                             },
                             child: Row(

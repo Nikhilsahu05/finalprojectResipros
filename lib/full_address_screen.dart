@@ -65,8 +65,8 @@ class _FullAddressScreenState extends State<FullAddressScreen> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Future createAddressInformation() async {
     await firebaseFirestore
-        .collection("${firebaseAuth.currentUser!.uid}")
-        .doc("Full_Address")
+        .collection("Full_Address")
+        .doc("${firebaseAuth.currentUser!.uid}")
         .set({
       "House_Number": houseNumber.text,
       "Locality": selectedLocality,
